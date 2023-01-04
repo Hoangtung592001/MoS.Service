@@ -1,0 +1,12 @@
+﻿using System;
+
+namespace MoS.Services
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
