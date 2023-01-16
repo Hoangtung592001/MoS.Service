@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MoS.DatabaseDefinition\MoS.DatabaseDefinition.csproj" />
     <ProjectReference Include="..\MoS.Implementations\MoS.Implementations.csproj" />
     <ProjectReference Include="..\MoS.Services\MoS.Services.csproj" />

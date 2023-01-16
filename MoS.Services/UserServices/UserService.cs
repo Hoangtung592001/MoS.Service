@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
 
-namespace MoS.Services.AuthenticationService
+namespace MoS.Services.UserServices
 {
     public class UserService
     {

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MoS.Models.Constants.Enums
 {
-    public static class Role
+    public static class BookImageType
     {
-        public enum RoleIDs
+        public enum BookImageTypeTDs
         {
-            Admin = 1,
-            User = 2
+            Main = 1,
+            Sub = 2
         }
     }
 }

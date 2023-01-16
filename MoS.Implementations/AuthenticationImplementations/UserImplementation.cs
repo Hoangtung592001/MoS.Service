@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoS.DatabaseDefinition.Contexts;
 using MoS.DatabaseDefinition.Models;
-using MoS.Services.AuthenticationService;
+using MoS.Services.UserServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
 using static MoS.Models.Constants.Enums.Role;
-using static MoS.Services.AuthenticationService.UserService;
+using static MoS.Services.UserServices.UserService;
 
 namespace MoS.Implementations.AuthenticationImplementations
 {
@@ -49,7 +49,7 @@ namespace MoS.Implementations.AuthenticationImplementations
             {
                 Username = user.Username,
                 Password = hashPassword,
-                RoleId = (int)UserRole.USER
+                RoleId = (int)RoleIDs.User
             };
 
             await _repository.Users.AddAsync(newUser);

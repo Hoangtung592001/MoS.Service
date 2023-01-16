@@ -1,4 +1,4 @@
-﻿namespace MoS.Services.AuthenticationService
+﻿namespace MoS.Services.UserServices
 {
     public class HashService
     {

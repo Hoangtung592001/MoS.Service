@@ -1,4 +1,4 @@
-﻿using MoS.Services.AuthenticationService;
+﻿using MoS.Services.UserServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using static MoS.Services.AuthenticationService.TokenService;
+using static MoS.Services.UserServices.TokenService;
 using static MoS.Models.Constants.Enums.Exception;
 
 namespace MoS.Implementations.AuthenticationImplementations

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoS.DatabaseDefinition.Models;
 using System.Threading.Tasks;
+using static MoS.Models.Constants.Enums.BookImageType;
+using static MoS.Models.Constants.Enums.Role;
 
 namespace MoS.DatabaseDefinition.Contexts
 {
@@ -14,8 +16,10 @@ namespace MoS.DatabaseDefinition.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "Admin" });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name = "User" });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = (int) RoleIDs.Admin, Name = "Admin" });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = (int) RoleIDs.User, Name = "User" });
+            modelBuilder.Entity<Role>().HasData(new BookImageType { Id = (int) BookImageTypeTDs.Main, Name = "Main" });
+            modelBuilder.Entity<Role>().HasData(new BookImageType { Id = (int)BookImageTypeTDs.Sub, Name = "Sub" });
         }
 
         public DbSet<Author> Authors { get; set; }

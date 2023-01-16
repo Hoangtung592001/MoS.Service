@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using MoS.DatabaseDefinition.Contexts;
 using MoS.Implementations.AuthenticationImplementations;
 using MoS.Implementations.AuthorImplementations;
-using MoS.Services.AuthenticationService;
+using MoS.Services.UserServices;
 using MoS.Services.AuthorService;
 using System.Text;
 
@@ -72,6 +72,8 @@ namespace MoS.Business
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

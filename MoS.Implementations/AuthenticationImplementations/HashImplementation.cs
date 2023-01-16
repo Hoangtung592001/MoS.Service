@@ -1,4 +1,4 @@
-﻿using static MoS.Services.AuthenticationService.HashService;
+﻿using static MoS.Services.UserServices.HashService;
 
 namespace MoS.Implementations.AuthenticationImplementations
 {

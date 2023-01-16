@@ -1,7 +1,7 @@
 ﻿using System;
 using static MoS.Models.Constants.Enums.Exception;
 
-namespace MoS.Services.AuthenticationService
+namespace MoS.Services.UserServices
 {
     public class TokenService
 	{
