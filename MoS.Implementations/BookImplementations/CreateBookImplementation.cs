@@ -1,10 +1,6 @@
 ﻿using MoS.DatabaseDefinition.Contexts;
-using MoS.Models.Constants.Enums;
-using MoS.Services.CommonServices;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Models.Constants.Enums.Exception;
@@ -83,6 +79,17 @@ namespace MoS.Implementations.BookImplementations
                 Edition = bookInformation.Edition,
                 BookDetails = bookInformation.BookDetails
             });
+
+            var images = from image in book.Images
+                         select new DatabaseDefinition.Models.BookImage
+                         {
+                             Id = Guid.NewGuid(),
+                             BookId = bookId,
+                             Url = image.Url,
+                             BookImageTypeId = image.BookImageTypeId
+                         };
+
+            _repository.BookImages.AddRange(images);
 
             await _repository.SaveChangesAsync();
             

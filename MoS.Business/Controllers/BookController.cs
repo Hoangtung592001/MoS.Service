@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
 using static MoS.Services.BookServices.CreateBookService;
 using static MoS.Services.BookServices.FrequentlyViewedItemsService;
+using static MoS.Services.BookServices.RecommendedItemsService;
 
 namespace MoS.Business.Controllers
 {
@@ -33,6 +34,17 @@ namespace MoS.Business.Controllers
             return Ok(new BaseResponse<IEnumerable<FrequentlyViewedItem>> {
                 Success = true,
                 Data = await new FrequentlyViewedItemsService(new FrequentlyViewedItemsImplementation(_db)).Get(request)
+            });
+        }
+
+        [HttpGet]
+        [Route("RecommendedItems")]
+        public async Task<IActionResult> RecommendedItems(RecommendedItemsRequest request)
+        {
+            return Ok(new BaseResponse<IEnumerable<RecommendedItem>>
+            {
+                Success = true,
+                Data = await new RecommendedItemsService(new RecommendedItemsImplementation(_db)).Get(request)
             });
         }
 
