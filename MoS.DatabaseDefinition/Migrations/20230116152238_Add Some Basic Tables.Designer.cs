@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230116152238_Add Some Basic Tables")]
+    partial class AddSomeBasicTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,11 +49,17 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BookDetailId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("BookInformationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("NumberOfViews")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("datetime2");
@@ -70,6 +78,8 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("BookDetailId");
 
                     b.HasIndex("BookInformationId");
 
@@ -99,6 +109,21 @@ namespace MoS.DatabaseDefinition.Migrations
                             Id = 1,
                             Name = "Fine"
                         });
+                });
+
+            modelBuilder.Entity("MoS.DatabaseDefinition.Models.BookDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BookDetails");
                 });
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.BookImage", b =>
@@ -163,13 +188,7 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<int>("BookConditionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("BookDetails")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Edition")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfViews")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
@@ -278,6 +297,12 @@ namespace MoS.DatabaseDefinition.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MoS.DatabaseDefinition.Models.BookDetail", "BookDetail")
+                        .WithMany()
+                        .HasForeignKey("BookDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MoS.DatabaseDefinition.Models.BookInformation", "BookInformation")
                         .WithMany()
                         .HasForeignKey("BookInformationId")
@@ -291,6 +316,8 @@ namespace MoS.DatabaseDefinition.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
+
+                    b.Navigation("BookDetail");
 
                     b.Navigation("BookInformation");
 

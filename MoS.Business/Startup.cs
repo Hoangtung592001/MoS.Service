@@ -13,6 +13,10 @@ using MoS.Implementations.AuthorImplementations;
 using MoS.Services.UserServices;
 using MoS.Services.AuthorService;
 using System.Text;
+using MoS.Services.CommonServices;
+using MoS.Implementations.CommonImplementations;
+using MoS.Services.BookServices;
+using MoS.Implementations.BookImplementations;
 
 namespace MoS.Business
 {
@@ -53,6 +57,8 @@ namespace MoS.Business
             services.AddScoped<HashService.IHashService, HashImplementation>();
             services.AddScoped<UserService.IUserService, UserImplementation>();
             services.AddScoped<CreateAuthorService.ICreateAuthorService, CreateAuthorImplementation>();
+            services.AddScoped<CommonService.ICommon, CommonImplementation>();
+            services.AddScoped<CreateBookService.ICreateBook, CreateBookImplementation>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });

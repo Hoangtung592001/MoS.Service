@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoS.DatabaseDefinition.Models;
 using System.Threading.Tasks;
-using static MoS.Models.Constants.Enums.BookImageType;
+using static MoS.Models.Constants.Enums.BookConditions;
+using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Models.Constants.Enums.Role;
 
 namespace MoS.DatabaseDefinition.Contexts
@@ -18,14 +19,14 @@ namespace MoS.DatabaseDefinition.Contexts
         {
             modelBuilder.Entity<Role>().HasData(new Role { Id = (int) RoleIDs.Admin, Name = "Admin" });
             modelBuilder.Entity<Role>().HasData(new Role { Id = (int) RoleIDs.User, Name = "User" });
-            modelBuilder.Entity<Role>().HasData(new BookImageType { Id = (int) BookImageTypeTDs.Main, Name = "Main" });
-            modelBuilder.Entity<Role>().HasData(new BookImageType { Id = (int)BookImageTypeTDs.Sub, Name = "Sub" });
+            modelBuilder.Entity<BookImageType>().HasData(new BookImageType { Id = (int) BookImageTypeTDs.Main, Name = "Main" });
+            modelBuilder.Entity<BookImageType>().HasData(new BookImageType { Id = (int)BookImageTypeTDs.Sub, Name = "Sub" });
+            modelBuilder.Entity<BookCondition>().HasData(new BookCondition { Id = (int)BookConditionIDs.Fine, Name = "Fine" });
         }
 
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<BookCondition> BookConditions { get; set; }
-        public DbSet<BookDetail> BookDetails { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
         public DbSet<BookImageType> BookImageTypes { get; set; }
         public DbSet<BookInformation> BookInformation { get; set; }

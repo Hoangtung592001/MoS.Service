@@ -14,12 +14,12 @@ namespace MoS.Business.Controllers
     [Route("User")]
     public class UserController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IApplicationDbContext _db;
         private readonly UserService.IUserService _userService;
         private readonly HashService.IHashService _hashService;
         private readonly TokenService.ITokenService _tokenService;
 
-        public UserController(ApplicationDbContext db,
+        public UserController(IApplicationDbContext db,
                             UserService.IUserService userService,
                             HashService.IHashService hashService,
                             TokenService.ITokenService tokenService)

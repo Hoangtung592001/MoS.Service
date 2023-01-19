@@ -24,8 +24,9 @@ namespace MoS.DatabaseDefinition.Migrations
                 name: "BookConditions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Condition = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,7 +51,7 @@ namespace MoS.DatabaseDefinition.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,40 +86,25 @@ namespace MoS.DatabaseDefinition.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "BookInformation",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PulisherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PushlishedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartedToSellAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PublisherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    BookConditionId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    SellOffRate = table.Column<double>(type: "float", nullable: false),
+                    Edition = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_BookInformation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Authors",
+                        name: "FK_BookInformation_BookConditions_BookConditionId",
+                        column: x => x.BookConditionId,
+                        principalTable: "BookConditions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Books_BookDetails_BookDetailId",
-                        column: x => x.BookDetailId,
-                        principalTable: "BookDetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Books_Publishers_PublisherId",
-                        column: x => x.PublisherId,
-                        principalTable: "Publishers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,6 +125,50 @@ namespace MoS.DatabaseDefinition.Migrations
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PublisherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookInformationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PublishedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartedToSellAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NumberOfViews = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Books_BookDetails_BookDetailId",
+                        column: x => x.BookDetailId,
+                        principalTable: "BookDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Books_BookInformation_BookInformationId",
+                        column: x => x.BookInformationId,
+                        principalTable: "BookInformation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Books_Publishers_PublisherId",
+                        column: x => x.PublisherId,
+                        principalTable: "Publishers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -169,44 +199,28 @@ namespace MoS.DatabaseDefinition.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "BookInformation",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "BookConditions",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Fine" });
+
+            migrationBuilder.InsertData(
+                table: "BookImageTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookConditionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    SellOffRate = table.Column<double>(type: "float", nullable: false),
-                    Edition = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookInformation", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BookInformation_BookConditions_BookConditionId",
-                        column: x => x.BookConditionId,
-                        principalTable: "BookConditions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookInformation_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    { 1, "Main" },
+                    { 2, "Sub" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Admin" });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 2, "User" });
+                values: new object[,]
+                {
+                    { 1, "Admin" },
+                    { 2, "User" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookImages_BookId",
@@ -224,12 +238,6 @@ namespace MoS.DatabaseDefinition.Migrations
                 column: "BookConditionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookInformation_BookId",
-                table: "BookInformation",
-                column: "BookId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Books_AuthorId",
                 table: "Books",
                 column: "AuthorId");
@@ -238,6 +246,11 @@ namespace MoS.DatabaseDefinition.Migrations
                 name: "IX_Books_BookDetailId",
                 table: "Books",
                 column: "BookDetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_BookInformationId",
+                table: "Books",
+                column: "BookInformationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_PublisherId",
@@ -256,16 +269,10 @@ namespace MoS.DatabaseDefinition.Migrations
                 name: "BookImages");
 
             migrationBuilder.DropTable(
-                name: "BookInformation");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "BookImageTypes");
-
-            migrationBuilder.DropTable(
-                name: "BookConditions");
 
             migrationBuilder.DropTable(
                 name: "Books");
@@ -280,7 +287,13 @@ namespace MoS.DatabaseDefinition.Migrations
                 name: "BookDetails");
 
             migrationBuilder.DropTable(
+                name: "BookInformation");
+
+            migrationBuilder.DropTable(
                 name: "Publishers");
+
+            migrationBuilder.DropTable(
+                name: "BookConditions");
         }
     }
 }

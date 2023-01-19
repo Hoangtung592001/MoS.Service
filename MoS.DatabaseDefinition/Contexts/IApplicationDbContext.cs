@@ -10,7 +10,6 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<BookCondition> BookConditions { get; set; }
-        public DbSet<BookDetail> BookDetails { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
         public DbSet<BookImageType> BookImageTypes { get; set; }
         public DbSet<BookInformation> BookInformation { get; set; }

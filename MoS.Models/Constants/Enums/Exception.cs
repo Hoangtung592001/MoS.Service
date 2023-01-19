@@ -12,7 +12,8 @@ namespace MoS.Models.Constants.Enums
         public const string SignInExceptionMessageType = "SignInExceptionMessage";
         public const string AuthenticationExceptionMessageType = "AuthenticationExceptionMessage";
         public const string CreateAuthorExceptionMessageType = "CreateAuthorExceptionMessage";
-        
+        public const string CreateBookExceptionMessageType = "CreateBookExceptionMessage";
+
         public enum CreateUserExceptionMessage
         {
             OTHERS = 0,
@@ -36,5 +37,14 @@ namespace MoS.Models.Constants.Enums
         {
             OTHERS = 1
         }
+
+        public enum CreateBookExceptionMessage { 
+            OTHERS = 1,
+            INVALID_AUTHOR = 1,
+            INVALID_PUBLISHER = 2,
+            INVALID_IMAGES = 3,
+            INVALID_CONDITIONS = 4
+        }
+
     }
 }

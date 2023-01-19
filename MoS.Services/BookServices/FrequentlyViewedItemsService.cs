@@ -33,14 +33,19 @@ namespace MoS.Services.BookServices
             public BookImage BookImage { get; set; }
         }
 
-        public interface IFrequentlyViewedItemsService
+        public class FrequentlyViewedItemsRequest
         {
-            Task<IEnumerable<FrequentlyViewedItem>> Get();
+            public int Limit { get; set; }
         }
 
-        public async Task<IEnumerable<FrequentlyViewedItem>> Get()
+        public interface IFrequentlyViewedItemsService
         {
-            return await _repository.Get();
+            Task<IEnumerable<FrequentlyViewedItem>> Get(FrequentlyViewedItemsRequest request);
+        }
+
+        public async Task<IEnumerable<FrequentlyViewedItem>> Get(FrequentlyViewedItemsRequest request)
+        {
+            return await _repository.Get(request);
         }
     }
 }

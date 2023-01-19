@@ -4,11 +4,12 @@ using MoS.Services.BookServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static MoS.Models.Constants.Enums.BookImageType;
+using static MoS.Models.Constants.Enums.BookImageTypes;
+using static MoS.Services.BookServices.FrequentlyViewedItemsService;
 
 namespace MoS.Implementations.BookImplementations
 {
-    public class FrequentlyViewedItemsImplementation : FrequentlyViewedItemsService.IFrequentlyViewedItemsService
+    public class FrequentlyViewedItemsImplementation : IFrequentlyViewedItemsService
     {
         private readonly IApplicationDbContext _repository;
 
@@ -17,29 +18,31 @@ namespace MoS.Implementations.BookImplementations
             _repository = repository;
         }
 
-        public async Task<IEnumerable<FrequentlyViewedItemsService.FrequentlyViewedItem>> Get()
+        public async Task<IEnumerable<FrequentlyViewedItem>> Get(FrequentlyViewedItemsRequest request)
         {
-            var data = (
+            var data = 
                     await _repository.Books
                         .Include(book => book.Author)
-                        .Include(book => book.BookImages)
+                        .Include(book => book.BookInformation)
+                        .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
                             .ThenInclude(image => image.BookImageType)
+                            .OrderByDescending(book => book.BookInformation.NumberOfViews).Take(request.Limit)
                         .Select(
-                            book => new FrequentlyViewedItemsService.FrequentlyViewedItem
+                            book => new FrequentlyViewedItem
                             {
                                 Id = book.Id,
                                 Title = book.Title,
-                                Author = new FrequentlyViewedItemsService.Author
+                                Author = new Author
                                 {
                                     Id = book.Author.Id,
                                     Name = book.Author.Name
                                 },
-                                BookImage = new FrequentlyViewedItemsService.BookImage
+                                BookImage = new BookImage
                                 {
                                     Id = book.BookImages.FirstOrDefault().Id,
                                     Url = book.BookImages.FirstOrDefault().Url
                                 }
-                            }).ToListAsync());
+                            }).ToListAsync();
 
             return data;
         }

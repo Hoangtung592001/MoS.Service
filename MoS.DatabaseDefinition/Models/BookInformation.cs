@@ -8,9 +8,7 @@ namespace MoS.DatabaseDefinition.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public Guid BookId { get; set; }
-        [Required]
-        public Guid BookConditionId { get; set; }
+        public int BookConditionId { get; set; }
         [Required]
         public int Quantity { get; set; }
         [Required]
@@ -20,5 +18,7 @@ namespace MoS.DatabaseDefinition.Models
         [Required]
         public int Edition { get; set; }
         public BookCondition BookCondition { get; set; }
+        public int NumberOfViews { get; set; } = 0;
+        public string BookDetails { get; set; }
     }
 }
