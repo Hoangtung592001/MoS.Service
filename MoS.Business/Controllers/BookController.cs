@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MoS.DatabaseDefinition.Contexts;
 using MoS.Implementations.BookImplementations;
 using MoS.Implementations.CommonImplementations;
@@ -8,6 +9,7 @@ using MoS.Services.CommonServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
 using static MoS.Services.BookServices.CreateBookService;
@@ -49,6 +51,7 @@ namespace MoS.Business.Controllers
             });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("CreateBook")]
         public async Task<IActionResult> CreateBook(CreateBookRequest request)
@@ -113,14 +116,26 @@ namespace MoS.Business.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("RecentlyViewedItem")]
-        public async Task<IActionResult> SetRecentlyViewedItem(GetRecentlyViewedItemRequest request)
+        public async Task<IActionResult> SetRecentlyViewedItem(SetRecentlyViewedItemRequest request)
         {
-            return Ok(new BaseResponse<IEnumerable<RecentlyViewedItem>>
+            var userId = new Guid(User.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
+            var credential = new Credential
             {
-                Success = true,
-                Data = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Get(request)
-            });
+                Id = userId
+            };
+
+            var isCreated = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Set(request, credential);
+
+            if (isCreated)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
+
+
     }
 }

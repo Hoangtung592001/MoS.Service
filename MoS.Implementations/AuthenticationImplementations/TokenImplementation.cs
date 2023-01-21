@@ -28,7 +28,7 @@ namespace MoS.Implementations.AuthenticationImplementations
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, info.Username),
+                new Claim(ClaimTypes.NameIdentifier, info.Id.ToString()),
                 new Claim(ClaimTypes.Role, info.Role)
             };
 
@@ -55,7 +55,7 @@ namespace MoS.Implementations.AuthenticationImplementations
 
                 onSuccess(new TokenService.TokenProps
                 {
-                    Username = info.Claims.First(claim => claim.Type == ClaimTypes.Name).Value,
+                    Id = new Guid(info.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value),
                     Role = info.Claims.First(claim => claim.Type == ClaimTypes.Role).Value
                 });
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoS.Models.CommonUseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,6 @@ namespace MoS.Services.BookServices
         public class GetRecentlyViewedItemRequest
         {
             public int Limit { get; set; }
-        }
-
-        public class SetecentlyViewedItemRequest
-        {
-
         }
 
         public class SetRecentlyViewedItemRequest
@@ -54,7 +50,7 @@ namespace MoS.Services.BookServices
         public interface IRecentlyViewedItems
         {
             Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request);
-            Task<bool> Set(SetRecentlyViewedItemRequest request);
+            Task<bool> Set(SetRecentlyViewedItemRequest request, Credential credential);
         }
 
         public async Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request)
@@ -62,9 +58,9 @@ namespace MoS.Services.BookServices
             return await _repository.Get(request);
         }
 
-        public async Task<bool> Set(SetRecentlyViewedItemRequest request)
+        public async Task<bool> Set(SetRecentlyViewedItemRequest request, Credential credential)
         {
-            return await _repository.Set(request);
+            return await _repository.Set(request, credential);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace MoS.Services.UserServices
 
         public class FoundUser
         {
+            public Guid Id { get; set; }
             public string Username { get; set; }
             public string Password { get; set; }
             public Role Role { get; set; }

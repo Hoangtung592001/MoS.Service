@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using System.Linq;
 using static MoS.Models.Constants.Enums.BookImageTypes;
+using MoS.Models.CommonUseModels;
 
 namespace MoS.Implementations.BookImplementations
 {
@@ -44,9 +45,24 @@ namespace MoS.Implementations.BookImplementations
             return data;
         }
 
-        public Task<bool> Set(SetRecentlyViewedItemRequest request)
+        public async Task<bool> Set(SetRecentlyViewedItemRequest request, Credential credential)
         {
-            throw new System.NotImplementedException();
+            var book = _db.Books.Where(book => book.Id.Equals(request.BookId)).FirstOrDefault();
+
+            if (book == null)
+            {
+                return false;
+            }
+
+            _db.UserRecentlyViewedItems.Add(new DatabaseDefinition.Models.UserRecentlyViewedItem
+            {
+                BookId = request.BookId,
+                UserId = credential.Id,
+            });
+
+            await _db.SaveChangesAsync();
+
+            return true;
         }
     }
 }

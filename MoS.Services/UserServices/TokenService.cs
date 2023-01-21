@@ -14,7 +14,7 @@ namespace MoS.Services.UserServices
 
 		public class TokenProps
 		{
-			public string Username { get; set; }
+			public Guid Id { get; set; }
 			public string Role { get; set; }
 		}
 

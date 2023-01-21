@@ -80,7 +80,7 @@ namespace MoS.Implementations.AuthenticationImplementations
                     {
                         var token = _tokenService.BuildToken(new TokenService.TokenProps
                         {
-                            Username = foundUser.Username,
+                            Id = foundUser.Id,
                             Role = foundUser.Role.Name
                         });
 
@@ -116,8 +116,9 @@ namespace MoS.Implementations.AuthenticationImplementations
 
         public async Task GetUserInfo(string username, Action<UserService.FoundUser> onItemReturn, Action onNotFound)
         {
-            var entry = (await _repository.Users.Include(user => user.Role).Select(user => new UserService.FoundUser
+            var entry = (await _repository.Users.Include(user => user.Role).Select(user => new FoundUser
             {
+                Id = user.Id,
                 Username = user.Username,
                 Password = user.Password,
                 Role = user.Role
