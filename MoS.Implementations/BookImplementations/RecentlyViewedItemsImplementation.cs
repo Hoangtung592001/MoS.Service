@@ -22,7 +22,6 @@ namespace MoS.Implementations.BookImplementations
             var data = await (from viewedItem in _db.UserRecentlyViewedItems
                         join book in _db.Books on viewedItem.BookId equals book.Id
                         join author in _db.Authors on book.AuthorId equals author.Id
-                        join bookInformation in _db.BookInformation on book.BookInformationId equals bookInformation.Id
                         join bookImage in _db.BookImages on book.Id equals bookImage.BookId where bookImage.BookImageTypeId == (int) BookImageTypeTDs.Main
                         orderby viewedItem.ViewedAt descending
                         select new RecentlyViewedItem

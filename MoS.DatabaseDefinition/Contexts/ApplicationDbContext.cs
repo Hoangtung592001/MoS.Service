@@ -29,7 +29,6 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<BookCondition> BookConditions { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
         public DbSet<BookImageType> BookImageTypes { get; set; }
-        public DbSet<BookInformation> BookInformation { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }

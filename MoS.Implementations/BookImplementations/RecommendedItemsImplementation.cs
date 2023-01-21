@@ -21,7 +21,6 @@ namespace MoS.Implementations.BookImplementations
             var data =
                     await _repository.Books
                         .Include(book => book.Author)
-                        .Include(book => book.BookInformation)
                         .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
                             .ThenInclude(image => image.BookImageType)
                             //.OrderBy(book => Guid.NewGuid()).Take(request.Limit)

@@ -22,15 +22,6 @@ namespace MoS.Services.BookServices
             public int BookImageTypeId { get; set; }
         }
 
-        public class BookInformation
-        {
-            public int Quantity { get; set; }
-            public double Price { get; set; }
-            public int Edition { get; set; }
-            public int BookConditionId { get; set; }
-            public string BookDetails { get; set; }
-        }
-
         public class CreateBookRequest
         {
             public Guid AuthorId { get; set; }
@@ -38,7 +29,11 @@ namespace MoS.Services.BookServices
             public DateTime PublishedAt { get; set; }
             public string Title { get; set; }
             public List<BookImage> Images { get; set; }
-            public BookInformation BookInformation { get; set; }
+            public int Quantity { get; set; }
+            public double Price { get; set; }
+            public int Edition { get; set; }
+            public int BookConditionId { get; set; }
+            public string BookDetails { get; set; }
         }
 
         public interface ICreateBook

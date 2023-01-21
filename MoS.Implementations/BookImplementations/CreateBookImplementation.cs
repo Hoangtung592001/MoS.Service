@@ -47,7 +47,7 @@ namespace MoS.Implementations.BookImplementations
                 return;
             }
 
-            var isValidConditions = BookConditionValues.Contains(book.BookInformation.BookConditionId);
+            var isValidConditions = BookConditionValues.Contains(book.BookConditionId);
 
             if (!isValidImages)
             {
@@ -55,9 +55,7 @@ namespace MoS.Implementations.BookImplementations
                 return;
             }
 
-            var bookInformationId = Guid.NewGuid();
             var bookId = Guid.NewGuid();
-            var bookInformation = book.BookInformation;
 
             _repository.Books.Add(new DatabaseDefinition.Models.Book
             {
@@ -65,19 +63,13 @@ namespace MoS.Implementations.BookImplementations
                 Title = book.Title,
                 AuthorId = book.AuthorId,
                 PublisherId = book.PulisherId,
-                BookInformationId = bookInformationId,
-                PublishedAt = book.PublishedAt
-            });
-
-            _repository.BookInformation.Add(new DatabaseDefinition.Models.BookInformation
-            {
-                Id = bookInformationId,
-                BookConditionId = bookInformation.BookConditionId,
-                Quantity = bookInformation.Quantity,
-                Price = bookInformation.Price,
+                PublishedAt = book.PublishedAt,
+                BookConditionId = book.BookConditionId,
+                Quantity = book.Quantity,
+                Price = book.Price,
                 SellOffRate = 0,
-                Edition = bookInformation.Edition,
-                BookDetails = bookInformation.BookDetails
+                Edition = book.Edition,
+                BookDetails = book.BookDetails
             });
 
             var images = from image in book.Images

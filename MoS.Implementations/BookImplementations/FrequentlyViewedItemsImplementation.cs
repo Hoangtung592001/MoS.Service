@@ -23,10 +23,9 @@ namespace MoS.Implementations.BookImplementations
             var data = 
                     await _repository.Books
                         .Include(book => book.Author)
-                        .Include(book => book.BookInformation)
                         .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
                             .ThenInclude(image => image.BookImageType)
-                            .OrderByDescending(book => book.BookInformation.NumberOfViews).Take(request.Limit)
+                            .OrderByDescending(book => book.NumberOfViews).Take(request.Limit)
                         .Select(
                             book => new FrequentlyViewedItem
                             {
