@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoS.DatabaseDefinition.Contexts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Services.BookServices.RecommendedItemsService;

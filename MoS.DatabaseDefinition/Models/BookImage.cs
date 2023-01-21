@@ -14,5 +14,8 @@ namespace MoS.DatabaseDefinition.Models
         [Required]
         public int BookImageTypeId { get; set; }
         public BookImageType BookImageType { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public DateTime DeletedAt { get; set; }
+        public Guid DeletedBy { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
 using static MoS.Services.BookServices.CreateBookService;
 using static MoS.Services.BookServices.FrequentlyViewedItemsService;
+using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using static MoS.Services.BookServices.RecommendedItemsService;
 
 namespace MoS.Business.Controllers
@@ -98,6 +99,28 @@ namespace MoS.Business.Controllers
                 });
 
             return response;
+        }
+
+        [HttpGet]
+        [Route("RecentlyViewedItem")]
+        public async Task<IActionResult> GetRecentlyViewedItem(GetRecentlyViewedItemRequest request)
+        {
+            return Ok(new BaseResponse<IEnumerable<RecentlyViewedItem>>
+            {
+                Success = true,
+                Data = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Get(request)
+            });
+        }
+
+        [HttpPost]
+        [Route("RecentlyViewedItem")]
+        public async Task<IActionResult> SetRecentlyViewedItem(GetRecentlyViewedItemRequest request)
+        {
+            return Ok(new BaseResponse<IEnumerable<RecentlyViewedItem>>
+            {
+                Success = true,
+                Data = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Get(request)
+            });
         }
     }
 }

@@ -22,5 +22,8 @@ namespace MoS.DatabaseDefinition.Models
 		public DateTime CreatedDate { get; set; } = DateTime.Now;
 
 		public DateTime? ChangedPasswordDate { get; set; }
+		public bool IsDeleted { get; set; } = false;
+		public DateTime DeletedAt { get; set; }
+		public Guid DeletedBy { get; set; }
 	}
 }

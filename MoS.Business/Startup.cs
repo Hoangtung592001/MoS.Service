@@ -59,6 +59,8 @@ namespace MoS.Business
             services.AddScoped<CreateAuthorService.ICreateAuthorService, CreateAuthorImplementation>();
             services.AddScoped<CommonService.ICommon, CommonImplementation>();
             services.AddScoped<CreateBookService.ICreateBook, CreateBookImplementation>();
+            services.AddScoped<RecentlyViewedItemsService.IRecentlyViewedItems, RecentlyViewedItemsImplementation>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });

@@ -20,5 +20,8 @@ namespace MoS.DatabaseDefinition.Models
         public BookCondition BookCondition { get; set; }
         public int NumberOfViews { get; set; } = 0;
         public string BookDetails { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public DateTime DeletedAt { get; set; }
+        public Guid DeletedBy { get; set; }
     }
 }

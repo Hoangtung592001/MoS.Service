@@ -25,5 +25,8 @@ namespace MoS.DatabaseDefinition.Models
         public Author Author { get; set; }
         public Publisher Publisher { get; set; }
         public List<BookImage> BookImages { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public DateTime DeletedAt { get; set; }
+        public Guid DeletedBy { get; set; }
     }
 }
