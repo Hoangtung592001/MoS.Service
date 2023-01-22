@@ -60,6 +60,7 @@ namespace MoS.Business
             services.AddScoped<CommonService.ICommon, CommonImplementation>();
             services.AddScoped<CreateBookService.ICreateBook, CreateBookImplementation>();
             services.AddScoped<RecentlyViewedItemsService.IRecentlyViewedItems, RecentlyViewedItemsImplementation>();
+            services.AddScoped<GetBookService.IGetBook, GetBookImplementation>();
 
             services.AddSwaggerGen(c =>
             {

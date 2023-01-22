@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
 using static MoS.Services.BookServices.CreateBookService;
 using static MoS.Services.BookServices.FrequentlyViewedItemsService;
+using static MoS.Services.BookServices.GetBookService;
 using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using static MoS.Services.BookServices.RecommendedItemsService;
 
@@ -136,6 +137,17 @@ namespace MoS.Business.Controllers
             return BadRequest();
         }
 
-
+        [HttpGet]
+        [Route("GetBookDetails/BookId")]
+        public async Task<IActionResult> GetBookDetails(Guid BookId)
+        {
+            return Ok(
+                    new BaseResponse<Book>
+                    {
+                        Success = true,
+                        Data = await new GetBookService(new GetBookImplementation(_db)).Get(BookId)
+                    }
+                );
+        }
     }
 }
