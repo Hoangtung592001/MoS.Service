@@ -58,5 +58,10 @@ namespace MoS.Implementations.CommonImplementations
 
             return credential;
         }
+
+        public double SellOfPrice(double originalPrice, double sellOffRate)
+        {
+            return originalPrice * (100 - sellOffRate) / 100;
+        }
     }
 }

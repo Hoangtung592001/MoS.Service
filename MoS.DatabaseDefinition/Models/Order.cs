@@ -24,7 +24,7 @@ namespace MoS.DatabaseDefinition.Models
         [Required]
         public double Latitude { get; set; }
         public int OrderStatusId { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }
         public Guid? DeletedBy { get; set; }
