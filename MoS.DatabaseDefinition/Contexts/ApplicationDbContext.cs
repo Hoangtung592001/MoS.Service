@@ -3,6 +3,7 @@ using MoS.DatabaseDefinition.Models;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.BookConditions;
 using static MoS.Models.Constants.Enums.BookImageTypes;
+using static MoS.Models.Constants.Enums.OrderStatus;
 using static MoS.Models.Constants.Enums.Role;
 
 namespace MoS.DatabaseDefinition.Contexts
@@ -22,6 +23,10 @@ namespace MoS.DatabaseDefinition.Contexts
             modelBuilder.Entity<BookImageType>().HasData(new BookImageType { Id = (int) BookImageTypeTDs.Main, Name = "Main" });
             modelBuilder.Entity<BookImageType>().HasData(new BookImageType { Id = (int)BookImageTypeTDs.Sub, Name = "Sub" });
             modelBuilder.Entity<BookCondition>().HasData(new BookCondition { Id = (int)BookConditionIDs.Fine, Name = "Fine" });
+            modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.PREPARING, Name = "Preparing" });
+            modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.PREPARED, Name = "Prepared" });
+            modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.DELIVERING, Name = "Delivering" });
+            modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.DELIVERED, Name = "Delivered" });
         }
 
         public DbSet<Author> Authors { get; set; }
@@ -33,8 +38,10 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRecentlyViewedItem> UserRecentlyViewedItems { get; set; }
-
         public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
 
         public Task<int> SaveChangesAsync()
         {

@@ -11,7 +11,7 @@ namespace MoS.DatabaseDefinition.Models
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
-        public DateTime DeletedAt { get; set; }
-        public Guid DeletedBy { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
     }
 }

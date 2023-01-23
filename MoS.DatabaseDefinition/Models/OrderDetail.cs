@@ -7,22 +7,21 @@ using System.Threading.Tasks;
 
 namespace MoS.DatabaseDefinition.Models
 {
-    public class BasketItem
+    public class OrderDetail
     {
         [Key]
         public Guid Id { get; set; }
         [Required]
+        public Guid OrderId { get; set; }
+        [Required]
         public Guid BookId { get; set; }
         [Required]
-        public Guid UserId { get; set; }
-        [Required]
         public int Quantity { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime? UpdatedAt { get; set; }
+        [Required]
+        public double OriginalPrice { get; set; }
+        [Required]
+        public double FinalPrice { get; set; }
         public Book Book { get; set; }
-        public User User { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
-        public Guid? DeletedBy { get; set; }
+        public Order Order { get; set; }
     }
 }

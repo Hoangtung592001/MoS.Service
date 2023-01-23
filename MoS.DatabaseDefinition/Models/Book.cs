@@ -33,8 +33,8 @@ namespace MoS.DatabaseDefinition.Models
         public int NumberOfViews { get; set; } = 0;
         public string BookDetails { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public DateTime DeletedAt { get; set; }
-        public Guid DeletedBy { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
         public Author Author { get; set; }
         public Publisher Publisher { get; set; }
         public List<BookImage> BookImages { get; set; }
