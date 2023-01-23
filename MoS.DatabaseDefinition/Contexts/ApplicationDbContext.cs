@@ -34,6 +34,8 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRecentlyViewedItem> UserRecentlyViewedItems { get; set; }
 
+        public DbSet<BasketItem> BasketItems { get; set; }
+
         public Task<int> SaveChangesAsync()
         {
             return base.SaveChangesAsync();

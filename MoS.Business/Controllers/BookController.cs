@@ -121,12 +121,8 @@ namespace MoS.Business.Controllers
         [Route("RecentlyViewedItem")]
         public async Task<IActionResult> SetRecentlyViewedItem(SetRecentlyViewedItemRequest request)
         {
-            var userId = new Guid(User.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
-            var credential = new Credential
-            {
-                Id = userId
-            };
-
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+            
             var isCreated = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Set(request, credential);
 
             if (isCreated)

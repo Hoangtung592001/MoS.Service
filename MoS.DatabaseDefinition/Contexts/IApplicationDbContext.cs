@@ -16,6 +16,7 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRecentlyViewedItem> UserRecentlyViewedItems { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
         public Task<int> SaveChangesAsync();
         public int SaveChanges();
     }

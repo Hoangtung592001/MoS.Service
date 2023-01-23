@@ -17,6 +17,8 @@ using MoS.Services.CommonServices;
 using MoS.Implementations.CommonImplementations;
 using MoS.Services.BookServices;
 using MoS.Implementations.BookImplementations;
+using MoS.Services.BasketServices;
+using MoS.Implementations.BasketImplementations;
 
 namespace MoS.Business
 {
@@ -61,6 +63,7 @@ namespace MoS.Business
             services.AddScoped<CreateBookService.ICreateBook, CreateBookImplementation>();
             services.AddScoped<RecentlyViewedItemsService.IRecentlyViewedItems, RecentlyViewedItemsImplementation>();
             services.AddScoped<GetBookService.IGetBook, GetBookImplementation>();
+            services.AddScoped<BasketService.IBasket, BasketImplementation>();
 
             services.AddSwaggerGen(c =>
             {

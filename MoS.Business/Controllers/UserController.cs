@@ -2,9 +2,6 @@
 using MoS.DatabaseDefinition.Contexts;
 using MoS.Models.CommonUseModels;
 using MoS.Services.UserServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
 

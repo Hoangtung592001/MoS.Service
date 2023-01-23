@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MoS.DatabaseDefinition.Contexts;
+using MoS.Models.CommonUseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static MoS.Services.CommonServices.CommonService;
@@ -13,10 +16,14 @@ namespace MoS.Implementations.CommonImplementations
     {
         private readonly IApplicationDbContext _repository;
 
+        public CommonImplementation()
+        {}
+
         public CommonImplementation(IApplicationDbContext repository)
         {
             _repository = repository;
         }
+
         public async Task<bool> CheckAuthorExist(Guid authorId)
         {
             var author = (await _repository.Authors.Where(a => a.Id.Equals(authorId)).ToListAsync()).FirstOrDefault();
@@ -39,6 +46,17 @@ namespace MoS.Implementations.CommonImplementations
             }
 
             return false;
+        }
+
+        public Credential GetCredential(ClaimsPrincipal User)
+        {
+            var userId = new Guid(User.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
+            var credential = new Credential
+            {
+                Id = userId
+            };
+
+            return credential;
         }
     }
 }

@@ -25,9 +25,6 @@ namespace MoS.Business.Controllers
         [Route("CreateNewAuthor")]
         public async Task<IActionResult> CreateNewAuthor(CreateAuthorService.Author author)
         {
-            string userId = User.FindFirst(ClaimTypes.Name)?.Value;
-            string role = User.FindFirst(ClaimTypes.Role)?.Value;
-
             IActionResult response = null;
             await new CreateAuthorService(_authorCreator).Create(
                     author,
