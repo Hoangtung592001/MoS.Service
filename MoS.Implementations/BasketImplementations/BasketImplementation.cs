@@ -6,16 +6,40 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using MoS.Models.CommonUseModels;
 using System;
+using MoS.Services.CommonServices;
 
 namespace MoS.Implementations.BasketImplementations
 {
     public class BasketImplementation : IBasket
     {
         private readonly IApplicationDbContext _db;
+        private readonly CommonService _commonService;
+
+        public BasketImplementation(IApplicationDbContext db, CommonService commonService)
+        {
+            _db = db;
+            _commonService = commonService;
+        }
 
         public BasketImplementation(IApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public async Task<bool> Delete(Guid BasketItemId, Credential credential)
+        {
+            var basketItem = _db.BasketItems.SingleOrDefault(item => item.Id.Equals(BasketItemId) && item.UserId.Equals(credential.Id));
+
+            if (basketItem != null)
+            {
+                _commonService.DeleteItem(basketItem, credential.Id);
+
+                await _db.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<IEnumerable<BasketItem>> Get(Credential credential)

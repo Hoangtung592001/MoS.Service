@@ -63,5 +63,12 @@ namespace MoS.Implementations.CommonImplementations
         {
             return originalPrice * (100 - sellOffRate) / 100;
         }
+
+        public void DeleteItem(dynamic item, Guid deletedBy)
+        {
+            item.IsDeleted = true;
+            item.DeletedAt = DateTime.Now;
+            item.DeletedBy = deletedBy;
+        }
     }
 }

@@ -21,6 +21,8 @@ namespace MoS.Services.CommonServices
             Task<bool> CheckPublisherExist(Guid publisherId);
             Credential GetCredential(ClaimsPrincipal User);
             double SellOfPrice(double originalPrice, double sellOffRate);
+
+            void DeleteItem(dynamic item, Guid deletedBy);
         }
 
         public async Task<bool> CheckAuthorExist(Guid authorId)
@@ -41,6 +43,11 @@ namespace MoS.Services.CommonServices
         public double SellOfPrice(double originalPrice, double sellOffRate)
         {
             return _repository.SellOfPrice(originalPrice, sellOffRate);
+        }
+
+        public void DeleteItem(dynamic item, Guid deletedBy)
+        {
+            _repository.DeleteItem(item, deletedBy);
         }
     }
 }

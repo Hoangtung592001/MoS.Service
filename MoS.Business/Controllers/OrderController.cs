@@ -14,6 +14,8 @@ using static MoS.Services.OrderServices.OrderService;
 
 namespace MoS.Business.Controllers
 {
+    [ApiController]
+    [Route("Order")]
     public class OrderController : Controller
     {
         private readonly IApplicationDbContext _db;
@@ -25,7 +27,7 @@ namespace MoS.Business.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetBasket()
+        public async Task<IActionResult> GetOrders()
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
@@ -40,7 +42,7 @@ namespace MoS.Business.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> SetBasket(SetOrderRequest request)
+        public async Task<IActionResult> SetOrder(SetOrderRequest request)
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 

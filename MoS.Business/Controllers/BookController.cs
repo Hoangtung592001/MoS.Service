@@ -134,7 +134,7 @@ namespace MoS.Business.Controllers
         }
 
         [HttpGet]
-        [Route("GetBookDetails/BookId")]
+        [Route("GetBookDetails/{BookId}")]
         public async Task<IActionResult> GetBookDetails(Guid BookId)
         {
             return Ok(
@@ -144,6 +144,23 @@ namespace MoS.Business.Controllers
                         Data = await new GetBookService(new GetBookImplementation(_db)).Get(BookId)
                     }
                 );
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteBook/{BookId}")]
+        public async Task<IActionResult> DeleteBook(Guid BookId)
+        {
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
+            var isDeleted = await new DeleteBookService(new DeleteBookImplementation(_db)).Delete(BookId, credential);
+
+            if (!isDeleted)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

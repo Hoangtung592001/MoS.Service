@@ -67,6 +67,7 @@ namespace MoS.Business
             services.AddScoped<GetBookService.IGetBook, GetBookImplementation>();
             services.AddScoped<BasketService.IBasket, BasketImplementation>();
             services.AddScoped<OrderService.IOrder, OrderImplementation>();
+            services.AddScoped<DeleteBookService.IDeleteBook, DeleteBookImplementation>();
 
             services.AddSwaggerGen(c =>
             {

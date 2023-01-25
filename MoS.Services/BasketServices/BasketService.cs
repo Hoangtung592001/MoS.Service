@@ -61,6 +61,7 @@ namespace MoS.Services.BasketServices
         {
             Task<IEnumerable<BasketItem>> Get(Credential credential);
             Task<bool> Set(SetBasketRequest request, Credential credential);
+            Task<bool> Delete(Guid BasketItemId, Credential credential);
         }
 
         public async Task<IEnumerable<BasketItem>> Get(Credential credential)
@@ -73,5 +74,10 @@ namespace MoS.Services.BasketServices
             return await _repository.Set(request, credential);
         }
 
+
+        public async Task<bool> Delete(Guid BasketItemId, Credential credential)
+        {
+            return await _repository.Delete(BasketItemId, credential);
+        }
     }
 }

@@ -20,10 +20,12 @@ namespace MoS.Business.Controllers
     public class BasketController : Controller
     {
         private readonly IApplicationDbContext _db;
+        private readonly CommonService _commonService;
 
-        public BasketController(IApplicationDbContext db)
+        public BasketController(IApplicationDbContext db, CommonService commonService)
         {
             _db = db;
+            _commonService = commonService;
         }
 
         [Authorize]
@@ -50,6 +52,22 @@ namespace MoS.Business.Controllers
             var isItemCreated = await new BasketService(new BasketImplementation(_db)).Set(request, credential);
             
             if (!isItemCreated)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("{BasketItemId}")]
+        public async Task<IActionResult> DeleteBasket(Guid BasketItemId)
+        {
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
+            var isDeleted = await new BasketService(new BasketImplementation(_db, _commonService)).Delete(BasketItemId, credential);
+
+            if (!isDeleted)
             {
                 return BadRequest();
             }
