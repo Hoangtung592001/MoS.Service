@@ -57,14 +57,20 @@ namespace MoS.Services.BasketServices
             public Book Book { get; set; }
         }
 
+        public class Basket
+        {
+            public IEnumerable<BasketItem> BasketItems { get; set; }
+            public double OrderTotal { get; set; }
+        }
+
         public interface IBasket
         {
-            Task<IEnumerable<BasketItem>> Get(Credential credential);
+            Task<Basket> Get(Credential credential);
             Task<bool> Set(SetBasketRequest request, Credential credential);
             Task<bool> Delete(Guid BasketItemId, Credential credential);
         }
 
-        public async Task<IEnumerable<BasketItem>> Get(Credential credential)
+        public async Task<Basket> Get(Credential credential)
         {
             return await _repository.Get(credential);
         }

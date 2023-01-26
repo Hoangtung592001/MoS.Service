@@ -22,10 +22,10 @@ namespace MoS.Business.Controllers
         private readonly IApplicationDbContext _db;
         private readonly CommonService _commonService;
 
-        public BasketController(IApplicationDbContext db, CommonService commonService)
+        public BasketController(IApplicationDbContext db)
         {
             _db = db;
-            _commonService = commonService;
+            _commonService = new CommonService(new CommonImplementation(db));
         }
 
         [Authorize]
@@ -35,10 +35,10 @@ namespace MoS.Business.Controllers
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
             return Ok(
-                    new BaseResponse<IEnumerable<BasketItem>>
+                    new BaseResponse<Basket>
                     {
                         Success = true,
-                        Data = await new BasketService(new BasketImplementation(_db)).Get(credential)
+                        Data = await new BasketService(new BasketImplementation(_db, _commonService)).Get(credential)
                     }
                 );
         }

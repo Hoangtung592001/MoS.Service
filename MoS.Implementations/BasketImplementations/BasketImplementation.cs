@@ -42,15 +42,15 @@ namespace MoS.Implementations.BasketImplementations
             return false;
         }
 
-        public async Task<IEnumerable<BasketItem>> Get(Credential credential)
+        public async Task<Basket> Get(Credential credential)
         {
-            var data = (
+            var basketItems = (
                     _db.BasketItems
                         .Include(item => item.Book)
                             .ThenInclude(book => book.Author)
                         .Include(item => item.Book)
                             .ThenInclude(book => book.Publisher)
-                        .Where(item => item.UserId == credential.Id)
+                        .Where(item => item.UserId == credential.Id && item.Book.IsDeleted == false)
                         .Select(
                             item => new BasketItem
                             {
@@ -81,14 +81,27 @@ namespace MoS.Implementations.BasketImplementations
                                 }
                             }
                         )
-                );
+                ).ToList();
+
+            double orderTotal = 0;
+
+            foreach(BasketItem item in basketItems)
+            {
+                orderTotal += item.Book.Quantity * _commonService.SellOfPrice(item.Book.Price, item.Book.SellOffRate);
+            }
+
+            var data = new Basket
+            {
+                BasketItems = basketItems,
+                OrderTotal = orderTotal
+            };
 
             return data;
         }
 
         public async Task<bool> Set(SetBasketRequest request, Credential credential)
         {
-            var book = _db.Books.Where(book => book.Id.Equals(request.BookId)).FirstOrDefault();
+            var book = _db.Books.Where(book => book.Id.Equals(request.BookId) && book.IsDeleted == false).FirstOrDefault();
 
             if (book == null)
             {
