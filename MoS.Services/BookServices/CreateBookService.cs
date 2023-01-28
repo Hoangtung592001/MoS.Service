@@ -38,10 +38,10 @@ namespace MoS.Services.BookServices
 
         public interface ICreateBook
         {
-            Task Create(CreateBookRequest book, Action onSuccess, Action<CreateBookExceptionMessage> onFail);
+            Task Create(CreateBookRequest book, Action onSuccess, Action<Guid> onFail);
         }
 
-        public async Task Create(CreateBookRequest book, Action onSuccess, Action<CreateBookExceptionMessage> onFail)
+        public async Task Create(CreateBookRequest book, Action onSuccess, Action<Guid> onFail)
         {
             await _repository.Create(book, onSuccess, onFail);
         }

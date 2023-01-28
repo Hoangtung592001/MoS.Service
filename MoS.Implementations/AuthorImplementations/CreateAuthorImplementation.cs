@@ -20,7 +20,7 @@ namespace MoS.Implementations.AuthorImplementations
             _repository = repository;
         }
 
-        public async Task Create(CreateAuthorService.Author author, Action onSuccess, Action<CreateAuthorExceptionMessage> onFail)
+        public async Task Create(CreateAuthorService.Author author, Action onSuccess, Action<Guid> onFail)
         {
             var newAuthor = new DatabaseDefinition.Models.Author
             {

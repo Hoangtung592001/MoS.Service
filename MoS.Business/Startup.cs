@@ -21,6 +21,8 @@ using MoS.Services.BasketServices;
 using MoS.Implementations.BasketImplementations;
 using MoS.Services.OrderServices;
 using MoS.Implementations.OrderImplementations;
+using MoS.Services.ExceptionServices;
+using MoS.Implementations.ExceptionImplementations;
 
 namespace MoS.Business
 {
@@ -68,7 +70,7 @@ namespace MoS.Business
             services.AddScoped<BasketService.IBasket, BasketImplementation>();
             services.AddScoped<OrderService.IOrder, OrderImplementation>();
             services.AddScoped<DeleteBookService.IDeleteBook, DeleteBookImplementation>();
-
+            services.AddScoped<ExceptionService.IException, ExceptionImplementation>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });

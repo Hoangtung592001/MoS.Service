@@ -19,10 +19,10 @@ namespace MoS.Services.AuthorService
 
         public interface ICreateAuthorService
         {
-            Task Create(Author author, Action onSuccess, Action<CreateAuthorExceptionMessage> onFail);
+            Task Create(Author author, Action onSuccess, Action<Guid> onFail);
         }
 
-        public async Task Create(Author author, Action onSuccess, Action<CreateAuthorExceptionMessage> onFail)
+        public async Task Create(Author author, Action onSuccess, Action<Guid> onFail)
         {
             await _repository.Create(author, onSuccess, onFail);
         }

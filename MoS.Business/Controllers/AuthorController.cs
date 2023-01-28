@@ -35,14 +35,10 @@ namespace MoS.Business.Controllers
                         });
                     },
                     (exception) => {
-                        if (exception == CreateAuthorExceptionMessage.OTHERS)
+                        response = BadRequest(new ExceptionResponse
                         {
-                            response = BadRequest(new ExceptionResponse
-                            {
-                                ErrorType = CreateAuthorExceptionMessageType,
-                                ErrorMessage = (int)CreateAuthorExceptionMessage.OTHERS
-                            });
-                        }
+                            ExceptionId = exception
+                        });
                     }
                 );
 

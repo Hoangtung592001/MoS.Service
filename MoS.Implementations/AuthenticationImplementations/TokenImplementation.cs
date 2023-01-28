@@ -1,10 +1,8 @@
 ﻿using MoS.Services.UserServices;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -45,7 +43,7 @@ namespace MoS.Implementations.AuthenticationImplementations
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
 
-        public void ExtractToken(TokenInfo token, Action<TokenProps> onSuccess, Action<AuthenticationExceptionMessage> onFail)
+        public void ExtractToken(TokenInfo token, Action<TokenProps> onSuccess, Action<Guid> onFail)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             try
@@ -61,7 +59,7 @@ namespace MoS.Implementations.AuthenticationImplementations
             }
             catch (Exception)
             {
-                onFail(AuthenticationExceptionMessage.UNAUTHORIZED);
+                onFail(AuthenticationExceptionMessages["UNAUTHORIZED"]);
             }
         }
     }

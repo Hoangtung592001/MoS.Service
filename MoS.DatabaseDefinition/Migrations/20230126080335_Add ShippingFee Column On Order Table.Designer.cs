@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230126080335_Add ShippingFee Column On Order Table")]
+    partial class AddShippingFeeColumnOnOrderTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,99 +258,6 @@ namespace MoS.DatabaseDefinition.Migrations
                             Id = 2,
                             IsDeleted = false,
                             Name = "Sub"
-                        });
-                });
-
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.Exception", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExceptionMessageType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Exceptions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("9d4e78aa-919a-415d-8e38-a314aa44a020"),
-                            Description = "Unknown Error",
-                            ExceptionMessageType = "UNKNOWN",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("d9930df8-6ec6-475b-ad74-2ded0901019c"),
-                            Description = "This user already exists",
-                            ExceptionMessageType = "USER_FOUND",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("998360fa-14ae-492c-80be-ee28470d8cfa"),
-                            Description = "This user already exists",
-                            ExceptionMessageType = "USER_NAME_NOT_FOUND",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("88d67bc0-e8c1-41d2-a1fe-7087ccb53e80"),
-                            Description = "Your password is wrong",
-                            ExceptionMessageType = "WRONG_PASSWORD",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("87c0861e-3641-47a8-87a4-bdd6478e5b65"),
-                            Description = "You are unauthorized now",
-                            ExceptionMessageType = "UNAUTHORIZED",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("d8acff1b-c89b-4e33-a436-744b362faf70"),
-                            Description = "This author does not exist",
-                            ExceptionMessageType = "INVALID_AUTHOR",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("c3b9c2d6-8e54-4c74-99bc-94118b24b415"),
-                            Description = "This publisher does not exist",
-                            ExceptionMessageType = "INVALID_PUBLISHER",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("63a89635-5851-4cd3-bc03-b90f7de409c2"),
-                            Description = "This book must have at least 1 main image",
-                            ExceptionMessageType = "INVALID_IMAGES",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("472f4bf4-d447-4ffc-992a-85336b89495e"),
-                            Description = "This condition does not exist",
-                            ExceptionMessageType = "INVALID_CONDITIONS",
-                            IsDeleted = false
                         });
                 });
 

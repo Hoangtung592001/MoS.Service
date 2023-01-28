@@ -9,7 +9,6 @@ namespace MoS.Models.CommonUseModels
     public class ExceptionResponse
     {
         public bool Success { get; set; } = false;
-        public string ErrorType { get; set; }
-        public int ErrorMessage { get; set; }
+        public Guid ExceptionId { get; set; }
     }
 }

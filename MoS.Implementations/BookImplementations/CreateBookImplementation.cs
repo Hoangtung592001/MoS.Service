@@ -20,19 +20,19 @@ namespace MoS.Implementations.BookImplementations
             _commonService = commonService;
         }
 
-        public async Task Create(CreateBookRequest book, Action onSuccess, Action<CreateBookExceptionMessage> onFail)
+        public async Task Create(CreateBookRequest book, Action onSuccess, Action<Guid> onFail)
         {
             var isValidAuthor = await _commonService.CheckAuthorExist(book.AuthorId);
             if (!isValidAuthor)
             {
-                onFail(CreateBookExceptionMessage.INVALID_AUTHOR);
+                onFail(CreateBookExceptionMessages["INVALID_AUTHOR"]);
                 return;
             }
 
             var isValidPublisher = await _commonService.CheckPublisherExist(book.PulisherId);
             if (!isValidPublisher)
             {
-                onFail(CreateBookExceptionMessage.INVALID_PUBLISHER);
+                onFail(CreateBookExceptionMessages["INVALID_PUBLISHER"]);
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace MoS.Implementations.BookImplementations
 
             if (!isValidImages)
             {
-                onFail(CreateBookExceptionMessage.INVALID_IMAGES);
+                onFail(CreateBookExceptionMessages["INVALID_IMAGES"]);
                 return;
             }
 
@@ -51,7 +51,7 @@ namespace MoS.Implementations.BookImplementations
 
             if (!isValidImages)
             {
-                onFail(CreateBookExceptionMessage.INVALID_CONDITIONS);
+                onFail(CreateBookExceptionMessages["INVALID_CONDITIONS"]);
                 return;
             }
 

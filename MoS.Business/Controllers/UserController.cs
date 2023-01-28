@@ -42,26 +42,12 @@ namespace MoS.Business.Controllers
                         Success = true
                     });
                 },
-                (exception) =>
-                {
-                    if (exception == CreateUserExceptionMessage.USER_FOUND)
+                (exception) => {
+                    response = BadRequest(new ExceptionResponse
                     {
-                        response = BadRequest(new ExceptionResponse
-                        {
-                            ErrorType = CreateUserExceptionMessageType,
-                            ErrorMessage = (int)CreateUserExceptionMessage.USER_FOUND
-                        });
-                    }
-                    else
-                    {
-                        response = BadRequest(new ExceptionResponse
-                        {
-                            ErrorType = CreateUserExceptionMessageType,
-                            ErrorMessage = (int)CreateUserExceptionMessage.OTHERS
-                        });
-                    }
-                }
-                );
+                        ExceptionId = exception
+                    });
+                });
 
             return response;
         }
@@ -85,32 +71,11 @@ namespace MoS.Business.Controllers
                             }
                         });
                     },
-                    (exception) =>
-                    {
-                        if (exception == SignInExceptionMessage.USER_NAME_NOT_FOUND)
+                    (exception) => {
+                        response = BadRequest(new ExceptionResponse
                         {
-                            response = BadRequest(new ExceptionResponse
-                            {
-                                ErrorType = SignInExceptionMessageType,
-                                ErrorMessage = (int)SignInExceptionMessage.USER_NAME_NOT_FOUND
-                            });
-                        }
-                        else if (exception == SignInExceptionMessage.WRONG_PASSWORD)
-                        {
-                            response = BadRequest(new ExceptionResponse
-                            {
-                                ErrorType = SignInExceptionMessageType,
-                                ErrorMessage = (int)SignInExceptionMessage.WRONG_PASSWORD
-                            });
-                        }
-                        else
-                        {
-                            response = BadRequest(new ExceptionResponse
-                            {
-                                ErrorType = SignInExceptionMessageType,
-                                ErrorMessage = (int)SignInExceptionMessage.OTHERS
-                            });
-                        }
+                            ExceptionId = exception
+                        });
                     });
 
             return response;

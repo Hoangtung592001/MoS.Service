@@ -5,7 +5,7 @@ using static MoS.Models.Constants.Enums.BookConditions;
 using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Models.Constants.Enums.OrderStatus;
 using static MoS.Models.Constants.Enums.Role;
-
+using static MoS.Models.Constants.Enums.Exception;
 namespace MoS.DatabaseDefinition.Contexts
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
@@ -27,6 +27,67 @@ namespace MoS.DatabaseDefinition.Contexts
             modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.PREPARED, Name = "Prepared" });
             modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.DELIVERING, Name = "Delivering" });
             modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.DELIVERED, Name = "Delivered" });
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = UnknownExceptionMessages["UNKNOWN"],
+                ExceptionMessageType = "UNKNOWN",
+                Description = "Unknown Error"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception {
+                Id = SignUpExceptionMessages["USER_FOUND"],
+                ExceptionMessageType = "USER_FOUND",
+                Description = "This user already exists"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = SignInExceptionMessages["USER_NAME_NOT_FOUND"],
+                ExceptionMessageType = "USER_NAME_NOT_FOUND",
+                Description = "This user already exists"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = SignInExceptionMessages["WRONG_PASSWORD"],
+                ExceptionMessageType = "WRONG_PASSWORD",
+                Description = "Your password is wrong"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = AuthenticationExceptionMessages["UNAUTHORIZED"],
+                ExceptionMessageType = "UNAUTHORIZED",
+                Description = "You are unauthorized now"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = CreateBookExceptionMessages["INVALID_AUTHOR"],
+                ExceptionMessageType = "INVALID_AUTHOR",
+                Description = "This author does not exist"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = CreateBookExceptionMessages["INVALID_PUBLISHER"],
+                ExceptionMessageType = "INVALID_PUBLISHER",
+                Description = "This publisher does not exist"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = CreateBookExceptionMessages["INVALID_IMAGES"],
+                ExceptionMessageType = "INVALID_IMAGES",
+                Description = "This book must have at least 1 main image"
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = CreateBookExceptionMessages["INVALID_CONDITIONS"],
+                ExceptionMessageType = "INVALID_CONDITIONS",
+                Description = "This condition does not exist"
+            });
         }
 
         public DbSet<Author> Authors { get; set; }
@@ -42,6 +103,7 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<Models.Exception> Exceptions { get; set; }
 
         public Task<int> SaveChangesAsync()
         {

@@ -48,6 +48,7 @@ namespace MoS.Implementations.OrderImplementations
                                 Latitude = order.Latitude,
                                 OrderStatusId = order.OrderStatusId,
                                 CreatedAt = order.CreatedAt,
+                                ShippingFee = order.ShippingFee,
                                 OrderDetails = order.OrderDetails.Select(
                                         orderDetail => new OrderDetail
                                         {
@@ -107,7 +108,8 @@ namespace MoS.Implementations.OrderImplementations
                         Address = request.Address,
                         Longtitude = request.Longtitude,
                         Latitude = request.Latitude,
-                        OrderStatusId = (int) OrderStatusIDs.PREPARING
+                        OrderStatusId = (int) OrderStatusIDs.PREPARING,
+                        ShippingFee = 0
                     }
                 );
 

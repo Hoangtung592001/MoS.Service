@@ -66,40 +66,11 @@ namespace MoS.Business.Controllers
                 () => {
                     response = Ok();
                 },
-                (exception) =>
-                {
-                    if (exception == CreateBookExceptionMessage.INVALID_AUTHOR)
+                (exception) => {
+                    response = BadRequest(new ExceptionResponse
                     {
-                        response = BadRequest(new ExceptionResponse
-                        {
-                            ErrorType = CreateBookExceptionMessageType,
-                            ErrorMessage = (int) CreateBookExceptionMessage.INVALID_AUTHOR
-                        });
-                    }
-                    else if (exception == CreateBookExceptionMessage.INVALID_IMAGES)
-                    {
-                        response = BadRequest(new ExceptionResponse
-                        {
-                            ErrorType = CreateBookExceptionMessageType,
-                            ErrorMessage = (int) CreateBookExceptionMessage.INVALID_IMAGES
-                        });
-                    }
-                    else if (exception == CreateBookExceptionMessage.INVALID_PUBLISHER)
-                    {
-                        response = BadRequest(new ExceptionResponse
-                        {
-                            ErrorType = CreateBookExceptionMessageType,
-                            ErrorMessage = (int)CreateBookExceptionMessage.INVALID_PUBLISHER
-                        });
-                    }
-                    else if (exception == CreateBookExceptionMessage.INVALID_CONDITIONS)
-                    {
-                        response = BadRequest(new ExceptionResponse
-                        {
-                            ErrorType = CreateBookExceptionMessageType,
-                            ErrorMessage = (int)CreateBookExceptionMessage.INVALID_CONDITIONS
-                        });
-                    }
+                        ExceptionId = exception
+                    });
                 });
 
             return response;

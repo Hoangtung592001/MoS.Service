@@ -76,6 +76,7 @@ namespace MoS.Services.OrderServices
             public double Longtitude { get; set; }
             public double Latitude { get; set; }
             public int OrderStatusId { get; set; }
+            public double ShippingFee { get; set; }
             public DateTime CreatedAt { get; set; }
             public ICollection<OrderDetail> OrderDetails { get; set; }
         }

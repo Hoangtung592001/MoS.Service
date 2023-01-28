@@ -23,6 +23,8 @@ namespace MoS.DatabaseDefinition.Models
         public double Longtitude { get; set; }
         [Required]
         public double Latitude { get; set; }
+        [Required]
+        public double ShippingFee { get; set; } = 0;
         public int OrderStatusId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;

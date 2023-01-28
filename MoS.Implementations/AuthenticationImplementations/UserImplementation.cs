@@ -27,13 +27,13 @@ namespace MoS.Implementations.AuthenticationImplementations
             _tokenService = tokenService;
         }
 
-        public async Task UserSignUp(UserService.Account user, Action onSucess, Action<CreateUserExceptionMessage> onFail)
+        public async Task UserSignUp(UserService.Account user, Action onSucess, Action<Guid> onFail)
         {
             bool isUserFound = true;
             await GetUserInfo(user.Username,
                             (userInDatabase) => {
                                 isUserFound = false;
-                                onFail(CreateUserExceptionMessage.USER_FOUND);
+                                onFail(SignUpExceptionMessages["USER_FOUND"]);
                             },
                             () => {
                                 onSucess();
@@ -56,7 +56,7 @@ namespace MoS.Implementations.AuthenticationImplementations
             await _repository.SaveChangesAsync();
         }
 
-        public async Task UserSignIn(UserService.Account user, Action<string> onSucess, Action<SignInExceptionMessage> onFail)
+        public async Task UserSignIn(Account user, Action<string> onSucess, Action<Guid> onFail)
         {
             bool isVerified = true;
             await VerifyUser(
@@ -88,11 +88,11 @@ namespace MoS.Implementations.AuthenticationImplementations
                     },
                     () =>
                     {
-                        onFail(SignInExceptionMessage.USER_NAME_NOT_FOUND);
+                        onFail(SignInExceptionMessages["USER_NAME_NOT_FOUND"]);
                     });
         }
 
-        public async Task VerifyUser(UserService.Account user, Action onSucess, Action<SignInExceptionMessage> onFail)
+        public async Task VerifyUser(UserService.Account user, Action onSucess, Action<Guid> onFail)
         {
             await GetUserInfo(
                     user.Username,
@@ -102,7 +102,7 @@ namespace MoS.Implementations.AuthenticationImplementations
 
                         if (!isVerified)
                         {
-                            onFail(SignInExceptionMessage.WRONG_PASSWORD);
+                            onFail(SignInExceptionMessages["WRONG_PASSWORD"]);
                             return;
                         }
 
@@ -110,7 +110,7 @@ namespace MoS.Implementations.AuthenticationImplementations
                     },
                     () =>
                     {
-                        onFail(SignInExceptionMessage.USER_NAME_NOT_FOUND);
+                        onFail(SignInExceptionMessages["USER_NAME_NOT_FOUND"]);
                     });
         }
 

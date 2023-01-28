@@ -26,7 +26,7 @@ namespace MoS.Services.UserServices
 		public interface ITokenService
 		{
 			string BuildToken(TokenProps info);
-			void ExtractToken(TokenInfo token, Action<TokenProps> onSuccess, Action<AuthenticationExceptionMessage> onFail);
+			void ExtractToken(TokenInfo token, Action<TokenProps> onSuccess, Action<Guid> onFail);
 		}
 
 		public string BuildToken(TokenProps info)
@@ -34,7 +34,7 @@ namespace MoS.Services.UserServices
 			return _repository.BuildToken(info);
 		}
 
-		public void ExtractToken(TokenInfo token, Action<TokenProps> onSuccess, Action<AuthenticationExceptionMessage> onFail)
+		public void ExtractToken(TokenInfo token, Action<TokenProps> onSuccess, Action<Guid> onFail)
 		{
 			_repository.ExtractToken(token, onSuccess, onFail);
 		}
