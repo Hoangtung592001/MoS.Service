@@ -24,7 +24,7 @@ namespace MoS.Implementations.ExceptionImplementations
             var data =
                     _db.Exceptions.SingleOrDefault(e => e.Id.Equals(exceptionId) && e.IsDeleted == false);
 
-            if (data != null)
+            if (data == null)
             {
                 return null;
             }
