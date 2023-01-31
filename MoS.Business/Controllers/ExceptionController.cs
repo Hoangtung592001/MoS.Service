@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoS.DatabaseDefinition.Contexts;
 using MoS.Implementations.ExceptionImplementations;
+using MoS.Models.CommonUseModels;
 using MoS.Services.ExceptionServices;
 using System;
 using Exception = MoS.Services.ExceptionServices.ExceptionService.Exception;
@@ -24,7 +25,10 @@ namespace MoS.Business.Controllers
         {
             var exception = new ExceptionService(new ExceptionImplementation(_db)).Get(exceptionId);
 
-            return Ok(exception);
+            return Ok(new BaseResponse<Exception>{
+                Success = true,
+                Data = exception
+            });
         }
     }
 }
