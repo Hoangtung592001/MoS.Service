@@ -25,7 +25,7 @@ namespace MoS.Services.UserServices
         public class Account
         {
             public string Username { get; set; }
-            public string Passoword { get; set; }
+            public string Password { get; set; }
         }
 
         public class TokenData

@@ -43,7 +43,7 @@ namespace MoS.Implementations.AuthenticationImplementations
                 return;
             }
 
-            string hashPassword = _hashService.Hash(user.Passoword);
+            string hashPassword = _hashService.Hash(user.Password);
 
             var newUser = new User
             {
@@ -98,7 +98,7 @@ namespace MoS.Implementations.AuthenticationImplementations
                     user.Username,
                     (foundUser) =>
                     {
-                        bool isVerified = _hashService.Verify(foundUser.Password, user.Passoword);
+                        bool isVerified = _hashService.Verify(foundUser.Password, user.Password);
 
                         if (!isVerified)
                         {
