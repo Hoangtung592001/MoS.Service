@@ -43,7 +43,7 @@ namespace MoS.Business.Controllers
                     });
                 },
                 (exception) => {
-                    response = BadRequest(new ExceptionResponse
+                    response = Ok(new ExceptionResponse
                     {
                         ExceptionId = exception
                     });
@@ -72,7 +72,7 @@ namespace MoS.Business.Controllers
                         });
                     },
                     (exception) => {
-                        response = BadRequest(new ExceptionResponse
+                        response = Ok(new ExceptionResponse
                         {
                             ExceptionId = exception
                         });

@@ -31,7 +31,7 @@ namespace MoS.Business.Controllers
             _db = db;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("FrequentlyViewedItems")]
         public async Task<IActionResult> FrequentlyViewedItems(FrequentlyViewedItemsRequest request)
         {
@@ -67,7 +67,7 @@ namespace MoS.Business.Controllers
                     response = Ok();
                 },
                 (exception) => {
-                    response = BadRequest(new ExceptionResponse
+                    response = Ok(new ExceptionResponse
                     {
                         ExceptionId = exception
                     });
@@ -77,7 +77,7 @@ namespace MoS.Business.Controllers
         }
 
         [HttpGet]
-        [Route("RecentlyViewedItem")]
+        [Route("RecentlyViewedItems")]
         public async Task<IActionResult> GetRecentlyViewedItem(GetRecentlyViewedItemRequest request)
         {
             return Ok(new BaseResponse<IEnumerable<RecentlyViewedItem>>
