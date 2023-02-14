@@ -33,6 +33,7 @@ namespace MoS.Services.BookServices
             public double Price { get; set; }
             public int Edition { get; set; }
             public int BookConditionId { get; set; }
+            public string Description { get; set; }
             public string BookDetails { get; set; }
         }
 

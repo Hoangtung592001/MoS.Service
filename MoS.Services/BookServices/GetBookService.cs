@@ -56,6 +56,7 @@ namespace MoS.Services.BookServices
             public int Edition { get; set; }
             public int NumberOfViews { get; set; } = 0;
             public string BookDetails { get; set; }
+            public string Description { get; set; }
             public Author Author { get; set; }
             public Publisher Publisher { get; set; }
             public List<BookImage> BookImages { get; set; }

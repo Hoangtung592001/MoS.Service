@@ -42,6 +42,7 @@ namespace MoS.Implementations.BookImplementations
                                 Edition = book.Edition,
                                 NumberOfViews = book.NumberOfViews,
                                 BookDetails = book.BookDetails,
+                                Description = book.Description,
                                 Author = new Author
                                 {
                                     Id = book.Author.Id,

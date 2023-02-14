@@ -69,7 +69,8 @@ namespace MoS.Implementations.BookImplementations
                 Price = book.Price,
                 SellOffRate = 0,
                 Edition = book.Edition,
-                BookDetails = book.BookDetails
+                BookDetails = book.BookDetails,
+                Description = book.Description
             });
 
             var images = from image in book.Images

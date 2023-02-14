@@ -30,6 +30,7 @@ namespace MoS.DatabaseDefinition.Models
         public double SellOffRate { get; set; }
         [Required]
         public int Edition { get; set; }
+        public string Description { get; set; }
         public int NumberOfViews { get; set; } = 0;
         public string BookDetails { get; set; }
         public bool IsDeleted { get; set; } = false;

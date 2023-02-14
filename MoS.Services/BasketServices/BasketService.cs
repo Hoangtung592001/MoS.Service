@@ -34,6 +34,12 @@ namespace MoS.Services.BasketServices
             public string Name { get; set; }
         }
 
+        public class BookImage
+        {
+            public Guid Id { get; set; }
+            public string Url { get; set; }
+        }
+
         public class Book
         {
             public Guid Id { get; set; }
@@ -42,6 +48,7 @@ namespace MoS.Services.BasketServices
             public Author Author { get; set; }
             public Guid PublisherId { get; set; }
             public Publisher Publisher { get; set; }
+            public BookImage BookImage { get; set; }
             public int BookConditionId { get; set; }
             public int Quantity { get; set; }
             public double Price { get; set; }
