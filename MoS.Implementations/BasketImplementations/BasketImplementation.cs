@@ -116,19 +116,44 @@ namespace MoS.Implementations.BasketImplementations
                 return false;
             }
 
-            _db.BasketItems.Add(
-                    new DatabaseDefinition.Models.BasketItem
-                    {
-                        Id = Guid.NewGuid(),
-                        BookId = request.BookId,
-                        UserId = credential.Id,
-                        Quantity = request.Quantity,
-                    }
-                );
+            var basketItem = await _db.BasketItems
+                                .Include(item => item.Book)
+                                .Where(item => item.UserId.Equals(credential.Id)
+                                        && item.BookId.Equals(request.BookId)
+                                        && item.Book.IsDeleted == false
+                                        ).FirstOrDefaultAsync();
+
+            if (basketItem != null)
+            {
+                basketItem.Quantity++;
+            }
+            else
+            {
+                _db.BasketItems.Add(
+                        new DatabaseDefinition.Models.BasketItem
+                        {
+                            Id = Guid.NewGuid(),
+                            BookId = request.BookId,
+                            UserId = credential.Id,
+                            Quantity = request.Quantity,
+                        }
+                    );
+            }
+
 
             await _db.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<int> GetTotal(Credential credential)
+        {
+            var total = await _db.BasketItems
+                .Include(item => item.Book)
+                .Where(item => item.UserId == credential.Id && item.IsDeleted == false && item.Book.IsDeleted == false)
+                .CountAsync();
+
+            return total;
         }
     }
 }

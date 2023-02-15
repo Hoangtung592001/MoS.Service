@@ -75,6 +75,7 @@ namespace MoS.Services.BasketServices
             Task<Basket> Get(Credential credential);
             Task<bool> Set(SetBasketRequest request, Credential credential);
             Task<bool> Delete(Guid BasketItemId, Credential credential);
+            Task<int> GetTotal(Credential credential);
         }
 
         public async Task<Basket> Get(Credential credential)
@@ -91,6 +92,11 @@ namespace MoS.Services.BasketServices
         public async Task<bool> Delete(Guid BasketItemId, Credential credential)
         {
             return await _repository.Delete(BasketItemId, credential);
+        }
+
+        public async Task<int> GetTotal(Credential credential)
+        {
+            return await _repository.GetTotal(credential);
         }
     }
 }

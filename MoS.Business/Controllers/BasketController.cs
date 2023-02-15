@@ -74,5 +74,20 @@ namespace MoS.Business.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        [Route("BasketTotal")]
+        public async Task<IActionResult> GetBasketTotal()
+        {
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
+            return Ok(
+                    new BaseResponse<int>
+                    {
+                        Success = true,
+                        Data = await new BasketService(new BasketImplementation(_db, _commonService)).GetTotal(credential)
+                    }
+                );
+        }
     }
 }
