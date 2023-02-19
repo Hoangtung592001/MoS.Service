@@ -70,11 +70,6 @@ namespace MoS.Services.OrderServices
         {
             public Guid Id { get; set; }
             public Guid UserId { get; set; }
-            public string ReceiverName { get; set; }
-            public string PhoneNumber { get; set; }
-            public string Address { get; set; }
-            public double Longtitude { get; set; }
-            public double Latitude { get; set; }
             public int OrderStatusId { get; set; }
             public double ShippingFee { get; set; }
             public DateTime CreatedAt { get; set; }

@@ -41,11 +41,6 @@ namespace MoS.Implementations.OrderImplementations
                             {
                                 Id = order.Id,
                                 UserId = order.UserId,
-                                ReceiverName = order.ReceiverName,
-                                PhoneNumber = order.PhoneNumber,
-                                Address = order.Address,
-                                Longtitude = order.Longtitude,
-                                Latitude = order.Latitude,
                                 OrderStatusId = order.OrderStatusId,
                                 CreatedAt = order.CreatedAt,
                                 ShippingFee = order.ShippingFee,
@@ -103,11 +98,6 @@ namespace MoS.Implementations.OrderImplementations
                     {
                         Id = orderId,
                         UserId = credential.Id,
-                        ReceiverName = request.ReceiverName,
-                        PhoneNumber = request.PhoneNumber,
-                        Address = request.Address,
-                        Longtitude = request.Longtitude,
-                        Latitude = request.Latitude,
                         OrderStatusId = (int) OrderStatusIDs.PREPARING,
                         ShippingFee = 0
                     }
