@@ -102,6 +102,27 @@ namespace MoS.DatabaseDefinition.Contexts
                 Name = "Visa",
                 Description = "Visa"
             });
+
+            modelBuilder.Entity<TransactionTypeDescription>().HasData(new TransactionTypeDescription
+            {
+                Id = 1,
+                Name = "Pending",
+                Description = "Transaction is pending"
+            });
+
+            modelBuilder.Entity<TransactionTypeDescription>().HasData(new TransactionTypeDescription
+            {
+                Id = 2,
+                Name = "Succeeded",
+                Description = "Transaction is Succeeded"
+            });
+
+            modelBuilder.Entity<TransactionTypeDescription>().HasData(new TransactionTypeDescription
+            {
+                Id = 3,
+                Name = "Failed",
+                Description = "Transaction is Failed"
+            });
         }
 
         public DbSet<Author> Authors { get; set; }
@@ -122,6 +143,8 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<PaymentOptionTypeDescription> PaymentOptionTypeDescriptions { get; set; }
         public DbSet<PaymentOption> PaymentOptions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+
+        public DbSet<TransactionTypeDescription> TransactionTypeDescriptions { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
