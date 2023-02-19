@@ -407,8 +407,9 @@ namespace MoS.DatabaseDefinition.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AddressId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -422,8 +423,22 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longtitude")
+                        .HasColumnType("float");
+
                     b.Property<int>("OrderStatusId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("ShippingFee")
                         .HasColumnType("float");
@@ -432,8 +447,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
 
                     b.ToTable("Orders");
                 });
@@ -519,83 +532,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentOption", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CardNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NameOnCard")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PaymentOptionTypeDescriptionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PaymentOptionTypeDescriptionId");
-
-                    b.ToTable("PaymentOptions");
-                });
-
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentOptionTypeDescription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentOptionTypeDescriptions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Cash",
-                            IsDeleted = false,
-                            Name = "Cash"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Visa",
-                            IsDeleted = false,
-                            Name = "Visa"
-                        });
-                });
-
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.Publisher", b =>
                 {
                     b.Property<Guid>("Id")
@@ -665,34 +601,6 @@ namespace MoS.DatabaseDefinition.Migrations
                             IsDeleted = false,
                             Name = "User"
                         });
-                });
-
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.Transaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("PaymentOptionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PaymentOptionId");
-
-                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.User", b =>
@@ -840,15 +748,6 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Navigation("BookImageType");
                 });
 
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.Order", b =>
-                {
-                    b.HasOne("MoS.DatabaseDefinition.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
-
-                    b.Navigation("Address");
-                });
-
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.OrderDetail", b =>
                 {
                     b.HasOne("MoS.DatabaseDefinition.Models.Book", "Book")
@@ -866,28 +765,6 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentOption", b =>
-                {
-                    b.HasOne("MoS.DatabaseDefinition.Models.PaymentOptionTypeDescription", "PaymentTypeDescription")
-                        .WithMany()
-                        .HasForeignKey("PaymentOptionTypeDescriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PaymentTypeDescription");
-                });
-
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.Transaction", b =>
-                {
-                    b.HasOne("MoS.DatabaseDefinition.Models.PaymentOption", "PaymentOption")
-                        .WithMany()
-                        .HasForeignKey("PaymentOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PaymentOption");
                 });
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.User", b =>
