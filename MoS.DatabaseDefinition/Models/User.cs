@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoS.DatabaseDefinition.Models
@@ -18,6 +19,7 @@ namespace MoS.DatabaseDefinition.Models
 		public int RoleId { get; set; }
 
 		public virtual Role Role { get; set; }
+		public ICollection<Address> Addresses { get; set; }
 
 		public DateTime CreatedDate { get; set; } = DateTime.Now;
 

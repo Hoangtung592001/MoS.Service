@@ -23,6 +23,8 @@ using MoS.Services.OrderServices;
 using MoS.Implementations.OrderImplementations;
 using MoS.Services.ExceptionServices;
 using MoS.Implementations.ExceptionImplementations;
+using MoS.Services.AddressServices;
+using MoS.Implementations.AddressImplementations;
 
 namespace MoS.Business
 {
@@ -78,6 +80,8 @@ namespace MoS.Business
             services.AddScoped<OrderService.IOrder, OrderImplementation>();
             services.AddScoped<DeleteBookService.IDeleteBook, DeleteBookImplementation>();
             services.AddScoped<ExceptionService.IException, ExceptionImplementation>();
+            services.AddScoped<GetAddressService.IGetAddress, GetAddressImplementation>();
+            services.AddScoped<SetAddressService.ISetAddress, SetAddressImplementation>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });
