@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230219142314_Add Foreign Key From Orders To Addresses")]
+    partial class AddForeignKeyFromOrdersToAddresses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -543,17 +545,17 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<string>("NameOnCard")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentOptionTypeDescriptionId")
+                    b.Property<int>("PaymentTypeDescriptionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentOptionTypeDescriptionId");
+                    b.HasIndex("PaymentTypeDescriptionId");
 
                     b.ToTable("PaymentOptions");
                 });
 
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentOptionTypeDescription", b =>
+            modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentTypeDescription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -577,7 +579,7 @@ namespace MoS.DatabaseDefinition.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentOptionTypeDescriptions");
+                    b.ToTable("PaymentTypeDescriptions");
 
                     b.HasData(
                         new
@@ -870,9 +872,9 @@ namespace MoS.DatabaseDefinition.Migrations
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentOption", b =>
                 {
-                    b.HasOne("MoS.DatabaseDefinition.Models.PaymentOptionTypeDescription", "PaymentTypeDescription")
+                    b.HasOne("MoS.DatabaseDefinition.Models.PaymentTypeDescription", "PaymentTypeDescription")
                         .WithMany()
-                        .HasForeignKey("PaymentOptionTypeDescriptionId")
+                        .HasForeignKey("PaymentTypeDescriptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

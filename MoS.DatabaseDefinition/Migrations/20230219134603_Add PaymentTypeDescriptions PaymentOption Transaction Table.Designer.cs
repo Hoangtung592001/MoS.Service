@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230219134603_Add PaymentTypeDescriptions PaymentOption Transaction Table")]
+    partial class AddPaymentTypeDescriptionsPaymentOptionTransactionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -407,8 +409,9 @@ namespace MoS.DatabaseDefinition.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AddressId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -422,8 +425,22 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longtitude")
+                        .HasColumnType("float");
+
                     b.Property<int>("OrderStatusId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("ShippingFee")
                         .HasColumnType("float");
@@ -432,8 +449,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
 
                     b.ToTable("Orders");
                 });
@@ -543,17 +558,17 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<string>("NameOnCard")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentOptionTypeDescriptionId")
+                    b.Property<int>("PaymentTypeDescriptionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentOptionTypeDescriptionId");
+                    b.HasIndex("PaymentTypeDescriptionId");
 
                     b.ToTable("PaymentOptions");
                 });
 
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentOptionTypeDescription", b =>
+            modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentTypeDescription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -577,7 +592,7 @@ namespace MoS.DatabaseDefinition.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentOptionTypeDescriptions");
+                    b.ToTable("PaymentTypeDescriptions");
 
                     b.HasData(
                         new
@@ -840,15 +855,6 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Navigation("BookImageType");
                 });
 
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.Order", b =>
-                {
-                    b.HasOne("MoS.DatabaseDefinition.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
-
-                    b.Navigation("Address");
-                });
-
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.OrderDetail", b =>
                 {
                     b.HasOne("MoS.DatabaseDefinition.Models.Book", "Book")
@@ -870,9 +876,9 @@ namespace MoS.DatabaseDefinition.Migrations
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.PaymentOption", b =>
                 {
-                    b.HasOne("MoS.DatabaseDefinition.Models.PaymentOptionTypeDescription", "PaymentTypeDescription")
+                    b.HasOne("MoS.DatabaseDefinition.Models.PaymentTypeDescription", "PaymentTypeDescription")
                         .WithMany()
-                        .HasForeignKey("PaymentOptionTypeDescriptionId")
+                        .HasForeignKey("PaymentTypeDescriptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

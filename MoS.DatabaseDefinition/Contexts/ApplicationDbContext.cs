@@ -88,6 +88,20 @@ namespace MoS.DatabaseDefinition.Contexts
                 ExceptionMessageType = "INVALID_CONDITIONS",
                 Description = "This condition does not exist"
             });
+
+            modelBuilder.Entity<PaymentOptionTypeDescription>().HasData(new PaymentOptionTypeDescription
+            {
+                Id = 1,
+                Name = "Cash",
+                Description = "Cash"
+            });
+
+            modelBuilder.Entity<PaymentOptionTypeDescription>().HasData(new PaymentOptionTypeDescription
+            {
+                Id = 2,
+                Name = "Visa",
+                Description = "Visa"
+            });
         }
 
         public DbSet<Author> Authors { get; set; }
@@ -105,6 +119,9 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Models.Exception> Exceptions { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<PaymentOptionTypeDescription> PaymentOptionTypeDescriptions { get; set; }
+        public DbSet<PaymentOption> PaymentOptions { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
