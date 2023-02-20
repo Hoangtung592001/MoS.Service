@@ -1,12 +1,18 @@
 ﻿using MoS.Models.CommonUseModels;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MoS.Services.PaymentServices
 {
     public class SetPaymentOptionsService
     {
         private readonly ISetPaymentOptions _repository;
+
+        public SetPaymentOptionsService(ISetPaymentOptions repository)
+        {
+            _repository = repository;
+        }
 
         public class PaymentOption
         {
@@ -18,12 +24,12 @@ namespace MoS.Services.PaymentServices
 
         public interface ISetPaymentOptions
         {
-            IEnumerable<PaymentOption> Set(Credential credential, PaymentOption paymentOption);
+            Task<bool> Set(Credential credential, PaymentOption paymentOption);
         }
 
-        public IEnumerable<PaymentOption> Set(Credential credential, PaymentOption paymentOption)
+        public async Task<bool> Set(Credential credential, PaymentOption paymentOption)
         {
-            return _repository.Set(credential, paymentOption);
+            return await _repository.Set(credential, paymentOption);
         }
     }
 }

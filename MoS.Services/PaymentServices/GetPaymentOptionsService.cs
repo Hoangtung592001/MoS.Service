@@ -11,6 +11,11 @@ namespace MoS.Services.PaymentServices
     {
         private readonly IGetPaymentOptions _repository;
 
+        public GetPaymentOptionsService(IGetPaymentOptions repository)
+        {
+            _repository = repository;
+        }
+
         public class PaymentOptionTypeDescription
         {
             public int Id { get; set; }
