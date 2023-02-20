@@ -25,6 +25,8 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<PaymentOptionTypeDescription> PaymentOptionTypeDescriptions { get; set; }
         public DbSet<PaymentOption> PaymentOptions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<TransactionTypeDescription> TransactionTypeDescriptions { get; set; }
+        
         public Task<int> SaveChangesAsync();
         public int SaveChanges();
     }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230219145830_Add TransactionTypeDescription Table")]
+    partial class AddTransactionTypeDescriptionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -546,14 +548,9 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<int>("PaymentOptionTypeDescriptionId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentOptionTypeDescriptionId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("PaymentOptions");
                 });
@@ -936,12 +933,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MoS.DatabaseDefinition.Models.User", null)
-                        .WithMany("PaymentOptions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("PaymentTypeDescription");
                 });
 
@@ -1007,8 +998,6 @@ namespace MoS.DatabaseDefinition.Migrations
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.User", b =>
                 {
                     b.Navigation("Addresses");
-
-                    b.Navigation("PaymentOptions");
                 });
 #pragma warning restore 612, 618
         }
