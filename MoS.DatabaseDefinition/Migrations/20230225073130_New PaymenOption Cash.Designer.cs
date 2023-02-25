@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230225073130_New PaymenOption Cash")]
+    partial class NewPaymenOptionCash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -492,9 +494,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BasketItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
@@ -507,9 +506,10 @@ namespace MoS.DatabaseDefinition.Migrations
                     b.Property<double>("OriginalPrice")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
-                    b.HasIndex("BasketItemId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
@@ -975,10 +975,6 @@ namespace MoS.DatabaseDefinition.Migrations
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.OrderDetail", b =>
                 {
-                    b.HasOne("MoS.DatabaseDefinition.Models.BasketItem", "BasketItem")
-                        .WithMany()
-                        .HasForeignKey("BasketItemId");
-
                     b.HasOne("MoS.DatabaseDefinition.Models.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
@@ -990,8 +986,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("BasketItem");
 
                     b.Navigation("Book");
 

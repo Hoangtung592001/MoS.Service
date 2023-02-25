@@ -71,28 +71,16 @@ namespace MoS.Services.OrderServices
             public Guid Id { get; set; }
             public Guid UserId { get; set; }
             public int OrderStatusId { get; set; }
-            public double ShippingFee { get; set; }
             public DateTime CreatedAt { get; set; }
             public ICollection<OrderDetail> OrderDetails { get; set; }
         }
 
         public class SetOrderRequest
         {
-            public class OrderDetail
-            {
-                public Guid BookId { get; set; }
-                public int Quantity { get; set; }
-            }
-
-            public List<OrderDetail> OrderDetails { get; set; }
-            public string ReceiverName { get; set; }
-            public string PhoneNumber { get; set; }
-            public string Address { get; set; }
-            public double Longtitude { get; set; }
-            public double Latitude { get; set; }
+            public List<Guid> BasketItemIDs { get; set; }
+            public Guid AddressId { get; set; }
+            public Guid PaymentOptionId { get; set; }
         }
-
-
 
         public interface IOrder
         {

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static MoS.Services.OrderServices.OrderService;
+using static MoS.Services.ShippingServices.ShippingService;
 
 namespace MoS.Business.Controllers
 {
@@ -19,10 +20,12 @@ namespace MoS.Business.Controllers
     public class OrderController : Controller
     {
         private readonly IApplicationDbContext _db;
+        private readonly IShipping _shippingService;
 
-        public OrderController(IApplicationDbContext db)
+        public OrderController(IApplicationDbContext db, IShipping shippingService)
         {
             _db = db;
+            _shippingService = shippingService;
         }
 
         [Authorize]
@@ -46,7 +49,7 @@ namespace MoS.Business.Controllers
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
-            var isOrderCreated = await new OrderService(new OrderImplementation(_db)).Set(request, credential);
+            var isOrderCreated = await new OrderService(new OrderImplementation(_db, _shippingService)).Set(request, credential);
 
 
             if (!isOrderCreated)

@@ -15,13 +15,13 @@ namespace MoS.DatabaseDefinition.Models
         public Guid OrderId { get; set; }
         [Required]
         public Guid BookId { get; set; }
-        [Required]
-        public int Quantity { get; set; }
+        public Guid? BasketItemId { get; set; }
         [Required]
         public double OriginalPrice { get; set; }
         [Required]
         public double FinalPrice { get; set; }
         public Book Book { get; set; }
         public Order Order { get; set; }
+        public BasketItem BasketItem { get; set; }
     }
 }
