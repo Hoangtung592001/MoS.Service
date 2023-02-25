@@ -12,7 +12,7 @@ namespace MoS.DatabaseDefinition.Models
         [Key]
         public int Id { get; set; }
         public int PhoneCode { get; set; }
-        public int CountryCode { get; set; }
+        public string CountryCode { get; set; }
         public string CountryName { get; set; }
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }
