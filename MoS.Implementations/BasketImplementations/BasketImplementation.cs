@@ -8,6 +8,7 @@ using MoS.Models.CommonUseModels;
 using System;
 using MoS.Services.CommonServices;
 using static MoS.Models.Constants.Enums.BookImageTypes;
+using static MoS.Models.Constants.Enums.BasketItemTypeDescription;
 
 namespace MoS.Implementations.BasketImplementations
 {
@@ -53,7 +54,9 @@ namespace MoS.Implementations.BasketImplementations
                             .ThenInclude(book => book.Publisher)
                         .Include(item => item.Book)
                             .ThenInclude(book => book.BookImages)
-                        .Where(item => item.UserId == credential.Id && item.Book.IsDeleted == false)
+                        .Where(item => item.UserId == credential.Id && 
+                                item.Book.IsDeleted == false && item.IsDeleted == false && 
+                                item.BasketItemTypeDescriptionId == (int)BasketItemTypeDescriptionIDs.InBasket)
                         .Select(
                             item => new BasketItem
                             {

@@ -30,11 +30,17 @@ namespace MoS.Services.AddressServices
         public interface IGetAddress
         {
             IEnumerable<Address> Get(Credential credential);
+            Address GetById(Credential credential, Guid addressId);
         }
 
         public IEnumerable<Address> Get(Credential credential)
         {
             return _repository.Get(credential);
+        }
+
+        public Address GetById(Credential credential, Guid addressId)
+        {
+            return _repository.GetById(credential, addressId);
         }
     }
 }

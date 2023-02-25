@@ -18,18 +18,18 @@ namespace MoS.Services.PaymentServices
         {
             public string CardNumber { get; set; }
             public DateTime ExpiryDate { get; set; }
-            public string NameOnCard { get; set; }
+            public string NameOnCreditCard { get; set; }
             public int PaymentOptionTypeDescriptionId { get; set; }
         }
 
         public interface ISetPaymentOptions
         {
-            Task<bool> Set(Credential credential, PaymentOption paymentOption);
+            Task Set(Credential credential, PaymentOption paymentOption, Action<Guid> onSuccess, Action onFail);
         }
 
-        public async Task<bool> Set(Credential credential, PaymentOption paymentOption)
+        public async Task Set(Credential credential, PaymentOption paymentOption, Action<Guid> onSuccess, Action onFail)
         {
-            return await _repository.Set(credential, paymentOption);
+            await _repository.Set(credential, paymentOption, onSuccess, onFail);
         }
     }
 }

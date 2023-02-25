@@ -32,13 +32,37 @@ namespace MoS.Implementations.PaymentImplementations
                         ExpiryDate = po.ExpiryDate,
                         NameOnCard = po.NameOnCard,
                         PaymentOptionTypeDescriptionId = po.PaymentOptionTypeDescriptionId,
-                        PaymentTypeDescription = new PaymentOptionTypeDescription
+                        PaymentOptionTypeDescription = new PaymentOptionTypeDescription
                         {
                             Id = po.PaymentTypeDescription.Id,
                             Description = po.PaymentTypeDescription.Description,
                             Name = po.PaymentTypeDescription.Name
                         }
                     }).AsEnumerable();
+
+            return data;
+        }
+
+        public PaymentOption GetById(Credential credential, Guid paymentOptionId)
+        {
+            var data = _db
+                    .PaymentOptions
+                    .Include(po => po.PaymentTypeDescription)
+                    .Where(po => po.UserId.Equals(credential.Id) && po.IsDeleted == false && po.Id.Equals(paymentOptionId))
+                    .Select(po => new PaymentOption
+                    {
+                        Id = po.Id,
+                        CardNumber = po.CardNumber,
+                        ExpiryDate = po.ExpiryDate,
+                        NameOnCard = po.NameOnCard,
+                        PaymentOptionTypeDescriptionId = po.PaymentOptionTypeDescriptionId,
+                        PaymentOptionTypeDescription = new PaymentOptionTypeDescription
+                        {
+                            Id = po.PaymentTypeDescription.Id,
+                            Description = po.PaymentTypeDescription.Description,
+                            Name = po.PaymentTypeDescription.Name
+                        }
+                    }).FirstOrDefault();
 
             return data;
         }

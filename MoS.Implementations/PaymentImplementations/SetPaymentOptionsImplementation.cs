@@ -18,7 +18,7 @@ namespace MoS.Implementations.PaymentImplementations
             _db = db;
         }
 
-        public async Task<bool> Set(Credential credential, PaymentOption paymentOption)
+        public async Task Set(Credential credential, PaymentOption paymentOption, Action<Guid> onSuccess, Action onFail)
         {
             var paymentOptionTypeDescription = _db
                                             .PaymentOptionTypeDescriptions
@@ -27,22 +27,24 @@ namespace MoS.Implementations.PaymentImplementations
 
             if (paymentOptionTypeDescription == null)
             {
-                return false;
+                onFail();
             }
+
+            var paymentOptionId = Guid.NewGuid();
 
             _db.PaymentOptions.Add(new DatabaseDefinition.Models.PaymentOption
             {
-                Id = Guid.NewGuid(),
+                Id = paymentOptionId,
                 CardNumber = paymentOption.CardNumber,
                 ExpiryDate = paymentOption.ExpiryDate,
-                NameOnCard = paymentOption.NameOnCard,
+                NameOnCard = paymentOption.NameOnCreditCard,
                 PaymentOptionTypeDescriptionId = paymentOption.PaymentOptionTypeDescriptionId,
                 UserId = credential.Id
             });
 
             await _db.SaveChangesAsync();
 
-            return true;
+            onSuccess(paymentOptionId);
         }
     }
 }

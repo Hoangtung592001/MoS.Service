@@ -31,16 +31,26 @@ namespace MoS.Business.Controllers
         [Route("PaymentOption")]
         public async Task<IActionResult> SetPaymentOption(PaymentOption paymentOption)
         {
+            IActionResult response = null;
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
-            var isSet = await new SetPaymentOptionsService(new SetPaymentOptionsImplementation(_db)).Set(credential, paymentOption);
+            await new SetPaymentOptionsService(new SetPaymentOptionsImplementation(_db))
+                .Set(
+                    credential, 
+                    paymentOption, 
+                    (paymentOptionId) => {
+                        response = Ok(new BaseResponse<Guid>
+                        {
+                            Success = true,
+                            Data = paymentOptionId
+                        });
+                    }, 
+                    () => {
+                        response = BadRequest();
+                    }
+                );
 
-            if (!isSet)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            return response;
         }
 
         [HttpGet]
@@ -54,6 +64,31 @@ namespace MoS.Business.Controllers
             {
                 Success = true,
                 Data = new GetPaymentOptionsService(new GetPaymentOptionsImplementation(_db)).Get(credential)
+            });
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("PaymentOption/{paymentOptionId}")]
+        public IActionResult GetPaymentOption(Guid paymentOptionId)
+        {
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
+            return Ok(new BaseResponse<Services.PaymentServices.GetPaymentOptionsService.PaymentOption>
+            {
+                Success = true,
+                Data = new GetPaymentOptionsService(new GetPaymentOptionsImplementation(_db)).GetById(credential, paymentOptionId)
+            });
+        }
+
+        [HttpGet]
+        [Route("PaymentOptionTypeDescription")]
+        public IActionResult GetPaymentOptionTypeDescription()
+        {
+            return Ok(new BaseResponse<IEnumerable<Services.PaymentServices.GetPaymentOptionTypeDescriptionService.PaymentOptionTypeDescription>>
+            {
+                Success = true,
+                Data = new GetPaymentOptionTypeDescriptionService(new GetPaymentOptionTypeDescriptionImplementation(_db)).Get()
             });
         }
     }

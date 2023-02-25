@@ -30,17 +30,23 @@ namespace MoS.Services.PaymentServices
             public DateTime ExpiryDate { get; set; }
             public string NameOnCard { get; set; }
             public int PaymentOptionTypeDescriptionId { get; set; }
-            public PaymentOptionTypeDescription PaymentTypeDescription { get; set; }
+            public PaymentOptionTypeDescription PaymentOptionTypeDescription { get; set; }
         }
 
         public interface IGetPaymentOptions
         {
             IEnumerable<PaymentOption> Get(Credential credential);
+            PaymentOption GetById(Credential credential, Guid paymentOptionId);
         }
 
         public IEnumerable<PaymentOption> Get(Credential credential)
         {
             return _repository.Get(credential);
+        }
+
+        public PaymentOption GetById(Credential credential, Guid paymentOptionId)
+        {
+            return _repository.GetById(credential, paymentOptionId);
         }
     }
 }

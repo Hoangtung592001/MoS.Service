@@ -28,12 +28,12 @@ namespace MoS.Services.AddressServices
 
         public interface ISetAddress
         {
-            Task<bool> Set(Credential credential, Address address);
+            Task Set(Credential credential, Address address, Action<Guid> onSuccess, Action onFail);
         }
 
-        public async Task<bool> Set(Credential credential, Address address)
+        public async Task Set(Credential credential, Address address, Action<Guid> onSuccess, Action onFail)
         {
-            return await _repository.Set(credential, address);
+            await _repository.Set(credential, address, onSuccess, onFail);
         }
     }
 }

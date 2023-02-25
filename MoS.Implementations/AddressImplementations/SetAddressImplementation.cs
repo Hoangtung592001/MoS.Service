@@ -17,8 +17,10 @@ namespace MoS.Implementations.AddressImplementations
             _repository = repository;
         }
 
-        public async Task<bool> Set(Credential credential, Address address)
+        public async Task Set(Credential credential, Address address, Action<Guid> onSuccess, Action onFail)
         {
+            var addressId = Guid.NewGuid();
+
             _repository.Addresses.Add(
                     new DatabaseDefinition.Models.Address
                     {
@@ -35,7 +37,7 @@ namespace MoS.Implementations.AddressImplementations
 
             await _repository.SaveChangesAsync();
 
-            return true;
+            onSuccess(addressId);
         }
     }
 }
