@@ -18,7 +18,7 @@ namespace MoS.Services.PaymentServices
             public DateTime ExpiryDate { get; set; }
             public string NameOnCard { get; set; }
             public int PaymentOptionTypeDescriptionId { get; set; }
-            //public PaymentOptionTypeDescription PaymentTypeDescription { get; set; }
+            //public PaymentOptionTypeDescription PaymentOptionTypeDescription { get; set; }
         }
 
         public class TransactionTypeDescription

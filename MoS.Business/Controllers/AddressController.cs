@@ -31,21 +31,33 @@ namespace MoS.Business.Controllers
         [Authorize]
         public async Task<IActionResult> SetAddress(Services.AddressServices.SetAddressService.Address address)
         {
+            IActionResult response = null;
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
-            var isSet = await new SetAddressService(new SetAddressImplementation(_db)).Set(credential, address);
+            await new SetAddressService(new SetAddressImplementation(_db))
+                .Set(
+                    credential, 
+                    address,
+                    (addressId) =>
+                    {
+                        response = Ok(new BaseResponse<Guid>
+                        {
+                            Success = true,
+                            Data = addressId
+                        });
+                    },
+                    () =>
+                    {
+                        response = BadRequest();
+                    }
+                 );
 
-            if (!isSet)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            return response;
         }
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetAddress()
+        public IActionResult GetAddresses()
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
@@ -53,6 +65,20 @@ namespace MoS.Business.Controllers
             {
                 Success = true,
                 Data = new GetAddressService(new GetAddressImplementation(_db)).Get(credential)
+            });
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("{addressId}")]
+        public IActionResult GetAddressById(Guid addressId)
+        {
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
+            return Ok(new BaseResponse<Services.AddressServices.GetAddressService.Address>
+            {
+                Success = true,
+                Data = new GetAddressService(new GetAddressImplementation(_db)).GetById(credential, addressId)
             });
         }
     }

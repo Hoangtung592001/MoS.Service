@@ -31,9 +31,34 @@ namespace MoS.Implementations.AddressImplementations
                         AddressLine = address.AddressLine,
                         Longitude = address.Longitude,
                         Latitude = address.Latitude,
-                        Distance = address.Distance
+                        Distance = address.Distance,
+                        Telephone = address.Telephone
                     }
                 ).AsEnumerable();
+
+            return data;
+        }
+
+        public Address GetById(Credential credential, Guid addressId)
+        {
+            var data = _repository
+                        .Addresses
+                        .Where(address =>
+                            address.UserId.Equals(credential.Id) &&
+                            address.Id.Equals(addressId) &&
+                            address.IsDeleted == false)
+                        .Select(
+                            address => new Address
+                            {
+                                Id = address.Id,
+                                FullName = address.FullName,
+                                AddressLine = address.AddressLine,
+                                Longitude = address.Longitude,
+                                Latitude = address.Latitude,
+                                Distance = address.Distance,
+                                Telephone = address.Telephone
+                            }
+                        ).FirstOrDefault();
 
             return data;
         }

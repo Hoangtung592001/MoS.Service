@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230221135921_Add Cash Method")]
+    partial class AddCashMethod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,9 +101,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("BasketItemTypeDescriptionId")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
@@ -128,56 +127,11 @@ namespace MoS.DatabaseDefinition.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BasketItemTypeDescriptionId");
-
                     b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("BasketItems");
-                });
-
-            modelBuilder.Entity("MoS.DatabaseDefinition.Models.BasketItemTypeDescription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BasketItemTypeDescriptions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Item is still in basket",
-                            IsDeleted = false,
-                            Name = "In Basket"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Item is ordered",
-                            IsDeleted = false,
-                            Name = "Ordered"
-                        });
                 });
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.Book", b =>
@@ -887,10 +841,6 @@ namespace MoS.DatabaseDefinition.Migrations
 
             modelBuilder.Entity("MoS.DatabaseDefinition.Models.BasketItem", b =>
                 {
-                    b.HasOne("MoS.DatabaseDefinition.Models.BasketItemTypeDescription", "BasketItemTypeDescription")
-                        .WithMany()
-                        .HasForeignKey("BasketItemTypeDescriptionId");
-
                     b.HasOne("MoS.DatabaseDefinition.Models.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
@@ -902,8 +852,6 @@ namespace MoS.DatabaseDefinition.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("BasketItemTypeDescription");
 
                     b.Navigation("Book");
 

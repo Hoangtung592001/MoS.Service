@@ -11,6 +11,11 @@ namespace MoS.Services.PaymentServices
     {
         private readonly IGetPaymentOptionTypeDescription _repository;
 
+        public GetPaymentOptionTypeDescriptionService(IGetPaymentOptionTypeDescription repository)
+        {
+            _repository = repository;
+        }
+
         public class PaymentOptionTypeDescription
         {
             public int Id { get; set; }
@@ -20,12 +25,12 @@ namespace MoS.Services.PaymentServices
 
         public interface IGetPaymentOptionTypeDescription
         {
-            IEnumerable<PaymentOptionTypeDescription> Get(Credential credential);
+            IEnumerable<PaymentOptionTypeDescription> Get();
         }
 
-        public IEnumerable<PaymentOptionTypeDescription> Get(Credential credential)
+        public IEnumerable<PaymentOptionTypeDescription> Get()
         {
-            return _repository.Get(credential);
+            return _repository.Get();
         }
     }
 }

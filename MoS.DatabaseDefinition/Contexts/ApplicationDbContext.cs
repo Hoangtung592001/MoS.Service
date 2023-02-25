@@ -123,6 +123,20 @@ namespace MoS.DatabaseDefinition.Contexts
                 Name = "Failed",
                 Description = "Transaction is Failed"
             });
+            
+            modelBuilder.Entity<BasketItemTypeDescription>().HasData(new BasketItemTypeDescription
+            {
+                Id = 1,
+                Name = "In Basket",
+                Description = "Item is still in basket"
+            });
+
+            modelBuilder.Entity<BasketItemTypeDescription>().HasData(new BasketItemTypeDescription
+            {
+                Id = 2,
+                Name = "Ordered",
+                Description = "Item is ordered"
+            });
         }
 
         public DbSet<Author> Authors { get; set; }
@@ -143,8 +157,8 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<PaymentOptionTypeDescription> PaymentOptionTypeDescriptions { get; set; }
         public DbSet<PaymentOption> PaymentOptions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-
         public DbSet<TransactionTypeDescription> TransactionTypeDescriptions { get; set; }
+        public DbSet<BasketItemTypeDescription> BasketItemTypeDescriptions { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
