@@ -25,6 +25,8 @@ using MoS.Services.ExceptionServices;
 using MoS.Implementations.ExceptionImplementations;
 using MoS.Services.AddressServices;
 using MoS.Implementations.AddressImplementations;
+using MoS.Services.ShippingServices;
+using MoS.Implementations.ShippingImplementations;
 
 namespace MoS.Business
 {
@@ -82,6 +84,7 @@ namespace MoS.Business
             services.AddScoped<ExceptionService.IException, ExceptionImplementation>();
             services.AddScoped<GetAddressService.IGetAddress, GetAddressImplementation>();
             services.AddScoped<SetAddressService.ISetAddress, SetAddressImplementation>();
+            services.AddScoped<ShippingService.IShipping, ShippingImplementation>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });

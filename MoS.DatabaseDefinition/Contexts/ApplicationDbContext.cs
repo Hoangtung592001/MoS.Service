@@ -6,6 +6,8 @@ using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Models.Constants.Enums.OrderStatus;
 using static MoS.Models.Constants.Enums.Role;
 using static MoS.Models.Constants.Enums.Exception;
+using static MoS.Models.Constants.Enums.PaymentOption;
+
 namespace MoS.DatabaseDefinition.Contexts
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
@@ -137,6 +139,12 @@ namespace MoS.DatabaseDefinition.Contexts
                 Name = "Ordered",
                 Description = "Item is ordered"
             });
+
+            modelBuilder.Entity<PaymentOption>().HasData(new PaymentOption
+            {
+                Id = PayByCash,
+                PaymentOptionTypeDescriptionId = (int) PaymentOptionTypeDescriptionIDs.Cash,
+            });
         }
 
         public DbSet<Author> Authors { get; set; }
@@ -159,6 +167,7 @@ namespace MoS.DatabaseDefinition.Contexts
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionTypeDescription> TransactionTypeDescriptions { get; set; }
         public DbSet<BasketItemTypeDescription> BasketItemTypeDescriptions { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
