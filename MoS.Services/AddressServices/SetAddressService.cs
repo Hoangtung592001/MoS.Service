@@ -24,6 +24,7 @@ namespace MoS.Services.AddressServices
             public double Longitude { get; set; }
             public double Latitude { get; set; }
             public double Distance { get; set; }
+            public int CountryId { get; set; }
         }
 
         public interface ISetAddress

@@ -16,6 +16,14 @@ namespace MoS.Services.AddressServices
             _repository = repository;
         }
 
+        public class Country
+        {
+            public int Id { get; set; }
+            public int PhoneCode { get; set; }
+            public string CountryCode { get; set; }
+            public string CountryName { get; set; }
+        }
+
         public class Address
         {
             public Guid Id { get; set; }
@@ -25,6 +33,8 @@ namespace MoS.Services.AddressServices
             public double Longitude { get; set; }
             public double Latitude { get; set; }
             public double Distance { get; set; }
+            public int? CountryId { get; set; }
+            public Country Country { get; set; }
         }
 
         public interface IGetAddress

@@ -111,7 +111,7 @@ namespace MoS.Implementations.OrderImplementations
                 return false;
             }
 
-            var shippingFee = _shippingService.Get(address.Distance);
+            var shippingFee = _shippingService.Get(address.Id);
             var orderId = Guid.NewGuid();
             var basketItems = await _db.BasketItems
                                 .Include(bi => bi.Book)

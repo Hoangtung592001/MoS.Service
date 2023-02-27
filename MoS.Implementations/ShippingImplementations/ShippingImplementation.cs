@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoS.DatabaseDefinition.Contexts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,8 +18,24 @@ namespace MoS.Implementations.ShippingImplementations
         private const double SHIPPING_DISTANCE_LEVEL_2 = 200;
         private const double SHIPPING_DISTANCE_LEVEL_3 = 400;
 
-        public double Get(double distance)
+        private readonly IApplicationDbContext _db;
+
+        public ShippingImplementation(IApplicationDbContext db)
         {
+            _db = db;
+        }
+
+        public double Get(Guid addressId)
+        {
+            var address = _db.Addresses.Where(a => a.Id.Equals(addressId) && a.IsDeleted == false).FirstOrDefault();
+
+            if (address == null)
+            {
+                return 0;
+            }
+
+            var distance = address.Distance;
+            
             if (distance < 0)
             {
                 return 0;
