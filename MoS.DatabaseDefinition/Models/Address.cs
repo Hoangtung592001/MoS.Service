@@ -12,12 +12,14 @@ namespace MoS.DatabaseDefinition.Models
         [Key]
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
+        public int? CountryId { get; set; }
         public string FullName { get; set; }
         public string AddressLine { get; set; }
         public string Telephone { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public double Distance { get; set; }
+        public Country Country { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedAt { get; set; }

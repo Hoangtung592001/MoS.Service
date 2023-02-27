@@ -22,7 +22,8 @@ namespace MoS.Implementations.AddressImplementations
         {
             var data = _repository
                 .Addresses
-                .Where(address => address.UserId == credential.Id && address.IsDeleted == false)
+                .Include(address => address.Country)
+                .Where(address => address.UserId == credential.Id && address.IsDeleted == false && address.Country.IsDeleted == false)
                 .Select(
                     address => new Address
                     {
@@ -32,7 +33,15 @@ namespace MoS.Implementations.AddressImplementations
                         Longitude = address.Longitude,
                         Latitude = address.Latitude,
                         Distance = address.Distance,
-                        Telephone = address.Telephone
+                        Telephone = address.Telephone,
+                        CountryId = address.CountryId,
+                        Country = new Country
+                        {
+                            Id = address.Country.Id,
+                            CountryCode = address.Country.CountryCode,
+                            CountryName = address.Country.CountryName,
+                            PhoneCode = address.Country.PhoneCode
+                        }
                     }
                 ).AsEnumerable();
 

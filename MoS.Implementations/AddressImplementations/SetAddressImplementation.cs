@@ -31,7 +31,8 @@ namespace MoS.Implementations.AddressImplementations
                         Latitude = address.Latitude,
                         Telephone = address.Telephone,
                         FullName = address.Fullname,
-                        Distance = address.Distance
+                        Distance = address.Distance,
+                        CountryId = address.CountryId
                     }
                 );
 

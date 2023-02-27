@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MoS.DatabaseDefinition.Contexts;
 using MoS.Implementations.ShippingImplementations;
 using MoS.Models.CommonUseModels;
 using MoS.Services.ShippingServices;
@@ -15,14 +16,22 @@ namespace MoS.Business.Controllers
     [Route("Shipping")]
     public class ShippingController : Controller
     {
+        private readonly IApplicationDbContext _db;
+
+        public ShippingController(IApplicationDbContext db)
+        {
+            _db = db;
+        }
+
         [HttpPost]
         [Authorize]
-        public IActionResult GetShippingFee(ShippingRequest shippingRequest)
+        [Route("{addressId}")]
+        public IActionResult GetShippingFee(Guid addressId)
         {
             return Ok(new BaseResponse<double>
             {
                 Success = true,
-                Data = new ShippingService(new ShippingImplementation()).Get(shippingRequest.Distance)
+                Data = new ShippingService(new ShippingImplementation(_db)).Get(addressId)
             });
         }
     }

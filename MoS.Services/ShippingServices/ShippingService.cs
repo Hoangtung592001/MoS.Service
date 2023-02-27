@@ -22,12 +22,12 @@ namespace MoS.Services.ShippingServices
 
         public interface IShipping
         {
-            double Get(double distance);
+            double Get(Guid addressId);
         }
 
-        public double Get(double distance)
+        public double Get(Guid addressId)
         {
-            return _repository.Get(distance);
+            return _repository.Get(addressId);
         }
     }
 }
