@@ -29,6 +29,8 @@ using MoS.Services.ShippingServices;
 using MoS.Implementations.ShippingImplementations;
 using MoS.Services.CountryServices;
 using MoS.Implementations.CountryImplementations;
+using MoS.Services.SearchBookServices;
+using MoS.Implementations.SearchBookImplementations;
 
 namespace MoS.Business
 {
@@ -88,6 +90,7 @@ namespace MoS.Business
             services.AddScoped<SetAddressService.ISetAddress, SetAddressImplementation>();
             services.AddScoped<ShippingService.IShipping, ShippingImplementation>();
             services.AddScoped<CountryService.ICountry, CountryImplementation>();
+            services.AddScoped<SearchBookService.ISearchBook, SearchBookImplementaion>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });

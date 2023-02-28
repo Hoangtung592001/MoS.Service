@@ -30,7 +30,7 @@ namespace MoS.Business.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetOrders()
+        public IActionResult GetOrders()
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
@@ -38,7 +38,7 @@ namespace MoS.Business.Controllers
                     new BaseResponse<IEnumerable<Order>>
                     {
                         Success = true,
-                        Data = await new OrderService(new OrderImplementation(_db)).Get(credential)
+                        Data = new OrderService(new OrderImplementation(_db)).Get(credential)
                     }
                 );
         }
@@ -48,16 +48,27 @@ namespace MoS.Business.Controllers
         public async Task<IActionResult> SetOrder(SetOrderRequest request)
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+            IActionResult response = null;
 
-            var isOrderCreated = await new OrderService(new OrderImplementation(_db, _shippingService)).Set(request, credential);
+            await new OrderService(new OrderImplementation(_db, _shippingService))
+                    .Set(request, 
+                        credential,
+                        (orderId) =>
+                        {
+                            response = Ok(new BaseResponse<Guid>
+                            {
+                                Success = true,
+                                Data = orderId
+                            });
+                        },
+                        () =>
+                        {
+                            response = BadRequest();
+                        }
+                        );
 
 
-            if (!isOrderCreated)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
+            return response;
         }
     }
 }

@@ -55,15 +55,29 @@ namespace MoS.Services.OrderServices
             public BookCondition BookCondition { get; set; }
         }
 
+        public class BasketItem
+        {
+            public Guid Id { get; set; }
+            public Guid BookId { get; set; }
+            public Guid UserId { get; set; }
+            public int Quantity { get; set; }
+            public Book Book { get; set; }
+        }
+
         public class OrderDetail
         {
             public Guid Id { get; set; }
             public Guid OrderId { get; set; }
-            public Guid BookId { get; set; }
-            public int Quantity { get; set; }
+            public Guid? BasketItemId { get; set; }
             public double OriginalPrice { get; set; }
             public double FinalPrice { get; set; }
-            public Book Book { get; set; }
+            public BasketItem BasketItem { get; set; }
+        }
+
+        public class OrderStatus
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
         }
 
         public class Order
@@ -71,8 +85,11 @@ namespace MoS.Services.OrderServices
             public Guid Id { get; set; }
             public Guid UserId { get; set; }
             public int OrderStatusId { get; set; }
+            public Guid? AddressId { get; set; }
+            public double ShippingFee { get; set; }
+            public OrderStatus OrderStatus { get; set; }
             public DateTime CreatedAt { get; set; }
-            public ICollection<OrderDetail> OrderDetails { get; set; }
+            public IEnumerable<OrderDetail> OrderDetails { get; set; }
         }
 
         public class SetOrderRequest
@@ -84,18 +101,18 @@ namespace MoS.Services.OrderServices
 
         public interface IOrder
         {
-            Task<IEnumerable<Order>> Get(Credential credential);
-            Task<bool> Set(SetOrderRequest request, Credential credential);
+            IEnumerable<Order> Get(Credential credential);
+            Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action onFail);
         }
 
-        public async Task<IEnumerable<Order>> Get(Credential credential)
+        public IEnumerable<Order> Get(Credential credential)
         {
-            return await _repository.Get(credential);
+            return _repository.Get(credential);
         }
 
-        public async Task<bool> Set(SetOrderRequest request, Credential credential)
+        public async Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action onFail)
         {
-            return await _repository.Set(request, credential);
+            await _repository.Set(request, credential, onSuccess, onFail);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace MoS.Implementations.BookImplementations
                         .Include(book => book.Author)
                         .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
                             .ThenInclude(image => image.BookImageType)
-                            //.OrderBy(book => Guid.NewGuid()).Take(request.Limit)
+                        .Where(book => book.IsDeleted == false)
                         .Select(
                             book => new RecommendedItem
                             {

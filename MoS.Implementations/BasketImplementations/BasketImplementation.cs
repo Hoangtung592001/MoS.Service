@@ -124,6 +124,7 @@ namespace MoS.Implementations.BasketImplementations
                                 .Where(item => item.UserId.Equals(credential.Id)
                                         && item.BookId.Equals(request.BookId)
                                         && item.Book.IsDeleted == false
+                                        && item.BasketItemTypeDescriptionId == (int) BasketItemTypeDescriptionIDs.InBasket
                                         ).FirstOrDefaultAsync();
 
             if (basketItem != null)
@@ -153,7 +154,10 @@ namespace MoS.Implementations.BasketImplementations
         {
             var total = await _db.BasketItems
                 .Include(item => item.Book)
-                .Where(item => item.UserId == credential.Id && item.IsDeleted == false && item.Book.IsDeleted == false)
+                .Where(item => item.UserId == credential.Id && 
+                        item.IsDeleted == false && 
+                        item.Book.IsDeleted == false &&
+                        item.BasketItemTypeDescriptionId == (int)BasketItemTypeDescriptionIDs.InBasket)
                 .CountAsync();
 
             return total;

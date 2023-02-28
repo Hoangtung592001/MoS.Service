@@ -18,7 +18,7 @@ namespace MoS.Implementations.BookImplementations
 
         public async Task<bool> Delete(Guid BookId, Credential credential)
         {
-            var book = _db.Books.SingleOrDefault(b => b.Id.Equals(BookId));
+            var book = _db.Books.SingleOrDefault(b => b.Id.Equals(BookId) && b.IsDeleted == false);
 
             if (book != null)
             {
