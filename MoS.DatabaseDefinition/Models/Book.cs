@@ -40,5 +40,6 @@ namespace MoS.DatabaseDefinition.Models
         public Publisher Publisher { get; set; }
         public List<BookImage> BookImages { get; set; }
         public BookCondition BookCondition { get; set; }
+        public bool? SyncToElastic { get; set; }
     }
 }

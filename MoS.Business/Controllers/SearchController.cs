@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MoS.DatabaseDefinition.Contexts;
-using MoS.Implementations.SearchBookImplementations;
+using MoS.Implementations.ElasticSearchImplementations;
 using MoS.Models.CommonUseModels;
-using MoS.Services.SearchBookServices;
+using MoS.Services.ElasticSearchServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static MoS.Services.SearchBookServices.SearchBookService;
+using static MoS.Services.ElasticSearchServices.GetBookService;
 
 namespace MoS.Business.Controllers
 {
@@ -16,19 +17,21 @@ namespace MoS.Business.Controllers
     public class SearchController : Controller
     {
         private readonly IApplicationDbContext _db;
+        public IConfiguration _configuration { get; set; }
 
-        public SearchController(IApplicationDbContext db)
+        public SearchController(IApplicationDbContext db, IConfiguration configuration)
         {
             _db = db;
+            _configuration = configuration;
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetShippingFee(SearchBookRequest request)
+        public async Task<IActionResult> SearchBooks(SearchBookRequest request)
         {
             return Ok(new BaseResponse<IEnumerable<Book>>
             {
                 Success = true,
-                Data = await new SearchBookService(new SearchBookImplementaion(_db)).Get(request.Title)
+                Data = await new GetBookService(new GetBookImplementation(_db, _configuration)).Get(request.Title)
             });
         }
     }

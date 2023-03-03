@@ -7,6 +7,7 @@ using static MoS.Models.Constants.Enums.Exception;
 using static MoS.Services.BookServices.CreateBookService;
 using static MoS.Services.CommonServices.CommonService;
 using static MoS.Models.Constants.Enums.BookConditions;
+using static MoS.Services.ElasticSearchServices.SetBookService;
 
 namespace MoS.Implementations.BookImplementations
 {
@@ -14,10 +15,18 @@ namespace MoS.Implementations.BookImplementations
     {
         private readonly IApplicationDbContext _repository;
         private readonly ICommon _commonService;
+        private readonly ISetBook _elasticSetBookService;
         public CreateBookImplementation(IApplicationDbContext repository, ICommon commonService)
         {
             _repository = repository;
             _commonService = commonService;
+        }
+
+        public CreateBookImplementation(IApplicationDbContext repository, ICommon commonService, ISetBook elasticSetBookService)
+        {
+            _repository = repository;
+            _commonService = commonService;
+            _elasticSetBookService = elasticSetBookService;
         }
 
         public async Task Create(CreateBookRequest book, Action onSuccess, Action<Guid> onFail)
@@ -57,6 +66,20 @@ namespace MoS.Implementations.BookImplementations
 
             var bookId = Guid.NewGuid();
 
+            bool syncToElastic = false;
+
+            await _elasticSetBookService.Set(new ElasticSearchRequestBody
+            {
+                Id = bookId,
+                Title = book.Title,
+                IsDeleted = false
+            },
+            () => {
+                syncToElastic = true;
+            },
+            () => { }
+            );
+
             _repository.Books.Add(new DatabaseDefinition.Models.Book
             {
                 Id = bookId,
@@ -70,7 +93,8 @@ namespace MoS.Implementations.BookImplementations
                 SellOffRate = 0,
                 Edition = book.Edition,
                 BookDetails = book.BookDetails,
-                Description = book.Description
+                Description = book.Description,
+                SyncToElastic = syncToElastic
             });
 
             var images = from image in book.Images
