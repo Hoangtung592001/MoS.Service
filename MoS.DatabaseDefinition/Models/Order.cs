@@ -22,6 +22,7 @@ namespace MoS.DatabaseDefinition.Models
         public DateTime? DeletedAt { get; set; }
         public Guid? DeletedBy { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
+        public OrderStatus OrderStatus { get; set; }
         public Address Address { get; set; }
     }
 }

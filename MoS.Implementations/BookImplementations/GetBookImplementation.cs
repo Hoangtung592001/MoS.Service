@@ -24,7 +24,7 @@ namespace MoS.Implementations.BookImplementations
                         .Include(book => book.Author)
                         .Include(book => book.BookImages)
                         .Include(book => book.BookCondition)
-                        .Where(book => book.Id.Equals(BookId))
+                        .Where(book => book.Id.Equals(BookId) && book.IsDeleted == false)
                         .Select(
                             book => new Book
                             {

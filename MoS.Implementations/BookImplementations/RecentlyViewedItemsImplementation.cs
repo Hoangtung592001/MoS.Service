@@ -23,8 +23,9 @@ namespace MoS.Implementations.BookImplementations
             var data = await (from viewedItem in _db.UserRecentlyViewedItems
                         join book in _db.Books on viewedItem.BookId equals book.Id
                         join author in _db.Authors on book.AuthorId equals author.Id
-                        join bookImage in _db.BookImages on book.Id equals bookImage.BookId where bookImage.BookImageTypeId == (int) BookImageTypeTDs.Main
-                        orderby viewedItem.ViewedAt descending
+                        join bookImage in _db.BookImages on book.Id equals bookImage.BookId 
+                        where bookImage.BookImageTypeId == (int) BookImageTypeTDs.Main && book.IsDeleted == false
+                              orderby viewedItem.ViewedAt descending
                         select new RecentlyViewedItem
                         {
                             Id = book.Id,
@@ -47,7 +48,7 @@ namespace MoS.Implementations.BookImplementations
 
         public async Task<bool> Set(SetRecentlyViewedItemRequest request, Credential credential)
         {
-            var book = _db.Books.Where(book => book.Id.Equals(request.BookId)).FirstOrDefault();
+            var book = _db.Books.Where(book => book.Id.Equals(request.BookId) && book.IsDeleted == false).FirstOrDefault();
 
             if (book == null)
             {

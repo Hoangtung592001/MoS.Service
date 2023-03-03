@@ -21,6 +21,7 @@ namespace MoS.Implementations.BookImplementations
         {
             var data = 
                     await _repository.Books
+                        .Where(book => book.IsDeleted == false)
                         .Include(book => book.Author)
                         .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
                             .ThenInclude(image => image.BookImageType)

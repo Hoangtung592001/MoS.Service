@@ -28,13 +28,14 @@ namespace MoS.Implementations.ShippingImplementations
         public double Get(Guid addressId)
         {
             var address = _db.Addresses.Where(a => a.Id.Equals(addressId) && a.IsDeleted == false).FirstOrDefault();
+            double shippingFee = 0;
 
             if (address == null)
             {
                 return 0;
             }
 
-            var distance = address.Distance;
+            var distance = address.Distance / 1000;
             
             if (distance < 0)
             {
@@ -43,20 +44,22 @@ namespace MoS.Implementations.ShippingImplementations
 
             if (distance < SHIPPING_DISTANCE_LEVEL_1)
             {
-                return distance * SHIPPING_FEE_LEVEL_1;
+                shippingFee = distance * SHIPPING_FEE_LEVEL_1;
             }
             else if (distance >= SHIPPING_DISTANCE_LEVEL_1 && distance <= SHIPPING_DISTANCE_LEVEL_2)
             {
-                return distance * SHIPPING_FEE_LEVEL_2;
+                shippingFee = distance* SHIPPING_FEE_LEVEL_2;
             }
             else if (distance >= SHIPPING_DISTANCE_LEVEL_2 && distance <= SHIPPING_DISTANCE_LEVEL_3)
             {
-                return distance * SHIPPING_FEE_LEVEL_3;
+                shippingFee = distance* SHIPPING_FEE_LEVEL_3;
             }
             else
             {
-                return distance * SHIPPING_FEE_LEVEL_4;
+                shippingFee = distance* SHIPPING_FEE_LEVEL_4;
             }
+
+            return Math.Round(shippingFee, 2);
         }
     }
 }

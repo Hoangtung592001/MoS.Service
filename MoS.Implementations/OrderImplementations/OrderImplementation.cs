@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static MoS.Models.Constants.Enums.BasketItemTypeDescription;
 using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Models.Constants.Enums.OrderStatus;
 using static MoS.Services.OrderServices.OrderService;
@@ -30,85 +31,109 @@ namespace MoS.Implementations.OrderImplementations
             _db = db;
         }
 
-        public Task<IEnumerable<Order>> Get(Credential credential)
+        public IEnumerable<Order> Get(Credential credential)
         {
-            throw new NotImplementedException();
+            var orders = _db.Orders
+                            .Include(order => order.OrderDetails)
+                            .Include(order => order.OrderDetails)
+                                .ThenInclude(orderDetail => orderDetail.BasketItem)
+                            .Include(order => order.OrderDetails)
+                                .ThenInclude(orderDetail => orderDetail.BasketItem)
+                                    .ThenInclude(basketItem => basketItem.Book)
+                            .Include(order => order.OrderDetails)
+                                .ThenInclude(orderDetail => orderDetail.BasketItem)
+                                    .ThenInclude(basketItem => basketItem.Book)
+                                        .ThenInclude(book => book.Author)
+                            .Include(order => order.OrderDetails)
+                                .ThenInclude(orderDetail => orderDetail.BasketItem)
+                                    .ThenInclude(basketItem => basketItem.Book)
+                                        .ThenInclude(book => book.Publisher)
+                            .Include(order => order.OrderDetails)
+                                .ThenInclude(orderDetail => orderDetail.BasketItem)
+                                    .ThenInclude(basketItem => basketItem.Book)
+                                        .ThenInclude(book => book.BookCondition)
+                            .Include(order => order.OrderDetails)
+                                .ThenInclude(orderDetail => orderDetail.BasketItem)
+                                    .ThenInclude(basketItem => basketItem.Book)
+                                        .ThenInclude(book => book.BookImages)
+                            .Include(order => order.Address)
+                            .Where(order => order.IsDeleted == false &&
+                                            order.UserId.Equals(credential.Id) &&
+                                            order.OrderDetails.Any(od => od.IsDeleted == false && od.BasketItem.IsDeleted == false && od.BasketItem.Book.IsDeleted == false))
+                            .OrderByDescending(order => order.CreatedAt)
+                            .Select(order => new Order
+                            {
+                                Id = order.Id,
+                                UserId = order.UserId,
+                                OrderStatusId = order.OrderStatusId,
+                                CreatedAt = order.CreatedAt,
+                                AddressId = order.AddressId,
+                                ShippingFee = order.ShippingFee,
+                                OrderStatus = new OrderStatus
+                                {
+                                    Id = order.OrderStatus.Id,
+                                    Name = order.OrderStatus.Name
+                                },
+                                OrderDetails = order.OrderDetails
+                                        .Select(
+                                        orderDetail => new OrderDetail
+                                        {
+                                            Id = orderDetail.Id,
+                                            OrderId = orderDetail.OrderId,
+                                            OriginalPrice = orderDetail.OriginalPrice,
+                                            FinalPrice = orderDetail.FinalPrice,
+                                            BasketItemId = orderDetail.BasketItemId,
+                                            BasketItem = new BasketItem
+                                            {
+                                                Id = orderDetail.BasketItem.Id,
+                                                BookId = orderDetail.BasketItem.BookId,
+                                                UserId = orderDetail.BasketItem.UserId,
+                                                Quantity = orderDetail.BasketItem.Quantity,
+                                                Book = new Book
+                                                {
+                                                    Id = orderDetail.BasketItem.Book.Id,
+                                                    Title = orderDetail.BasketItem.Book.Title,
+                                                    AuthorId = orderDetail.BasketItem.Book.AuthorId,
+                                                    PublisherId = orderDetail.BasketItem.Book.PublisherId,
+                                                    BookConditionId = orderDetail.BasketItem.Book.BookConditionId,
+                                                    Edition = orderDetail.BasketItem.Book.Edition,
+                                                    Author = new Author
+                                                    {
+                                                        Id = orderDetail.BasketItem.Book.Author.Id,
+                                                        Name = orderDetail.BasketItem.Book.Author.Name
+                                                    },
+                                                    Publisher = new Publisher
+                                                    {
+                                                        Id = orderDetail.BasketItem.Book.Publisher.Id,
+                                                        Name = orderDetail.BasketItem.Book.Publisher.Name
+                                                    },
+                                                    BookImage = new BookImage
+                                                    {
+                                                        Id = orderDetail.BasketItem.Book.BookImages.Where(bookImage => bookImage.BookImageTypeId == (int)BookImageTypeTDs.Main).FirstOrDefault().Id,
+                                                        Url = orderDetail.BasketItem.Book.BookImages.Where(bookImage => bookImage.BookImageTypeId == (int)BookImageTypeTDs.Main).FirstOrDefault().Url
+                                                    },
+                                                    BookCondition = new BookCondition
+                                                    {
+                                                        Id = orderDetail.BasketItem.Book.BookCondition.Id,
+                                                        Name = orderDetail.BasketItem.Book.BookCondition.Name
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    )
+                            }
+                            ).AsEnumerable();
+
+            return orders;
         }
 
-        //public async Task<IEnumerable<Order>> Get(Credential credential)
-        //{
-        //    var orders = _db.Orders
-        //                    .Include(order => order.OrderDetails)
-        //                        .ThenInclude(orderDetail => orderDetail.Book)
-        //                            .ThenInclude(book => book.Author)
-        //                    .Include(order => order.OrderDetails)
-        //                        .ThenInclude(orderDetail => orderDetail.Book)
-        //                            .ThenInclude(book => book.Publisher)
-        //                    .Include(order => order.OrderDetails)
-        //                        .ThenInclude(orderDetail => orderDetail.Book)
-        //                            .ThenInclude(book => book.BookCondition)
-        //                    .Include(order => order.OrderDetails)
-        //                        .ThenInclude(orderDetail => orderDetail.Book)
-        //                            .ThenInclude(book => book.BookImages)
-        //                    .Select(order => new Order
-        //                    {
-        //                        Id = order.Id,
-        //                        UserId = order.UserId,
-        //                        OrderStatusId = order.OrderStatusId,
-        //                        CreatedAt = order.CreatedAt,
-        //                        ShippingFee = order.ShippingFee,
-        //                        OrderDetails = order.OrderDetails.Select(
-        //                                orderDetail => new OrderDetail
-        //                                {
-        //                                    Id = orderDetail.Id,
-        //                                    OrderId = orderDetail.OrderId,
-        //                                    BookId = orderDetail.BookId,
-        //                                    Quantity = orderDetail.Quantity,
-        //                                    OriginalPrice = orderDetail.OriginalPrice,
-        //                                    FinalPrice = orderDetail.FinalPrice,
-        //                                    Book = new Book
-        //                                    {
-        //                                        Id = orderDetail.Book.Id,
-        //                                        Title = orderDetail.Book.Title,
-        //                                        AuthorId = orderDetail.Book.AuthorId,
-        //                                        PublisherId = orderDetail.Book.PublisherId,
-        //                                        BookConditionId = orderDetail.Book.BookConditionId,
-        //                                        Edition = orderDetail.Book.Edition,
-        //                                        Author = new Author
-        //                                        {
-        //                                            Id = orderDetail.Book.Author.Id,
-        //                                            Name = orderDetail.Book.Author.Name
-        //                                        },
-        //                                        Publisher = new Publisher
-        //                                        {
-        //                                            Id = orderDetail.Book.Publisher.Id,
-        //                                            Name = orderDetail.Book.Publisher.Name
-        //                                        },
-        //                                        BookImage = new BookImage
-        //                                        {
-        //                                            Id = orderDetail.Book.BookImages.Where(bookImage => bookImage.BookImageTypeId == (int)BookImageTypeTDs.Main).FirstOrDefault().Id,
-        //                                            Url = orderDetail.Book.BookImages.Where(bookImage => bookImage.BookImageTypeId == (int)BookImageTypeTDs.Main).FirstOrDefault().Url
-        //                                        },
-        //                                        BookCondition = new BookCondition
-        //                                        {
-        //                                            Id = orderDetail.Book.BookCondition.Id,
-        //                                            Name = orderDetail.Book.BookCondition.Name
-        //                                        }
-        //                                    }
-        //                                }
-        //                            ).ToList()
-        //                    });
-
-        //    return orders;
-        //}
-
-        public async Task<bool> Set(SetOrderRequest request, Credential credential)
+        public async Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action onFail)
         {
             var address = _db.Addresses.Where(a => a.Id.Equals(request.AddressId) && a.IsDeleted == false).FirstOrDefault();
 
             if (address == null)
             {
-                return false;
+                onFail();
             }
 
             var shippingFee = _shippingService.Get(address.Id);
@@ -120,13 +145,17 @@ namespace MoS.Implementations.OrderImplementations
                                     bi.IsDeleted == false &&
                                     bi.Book.IsDeleted == false).ToListAsync();
 
+            foreach (var item in basketItems)
+            {
+                item.BasketItemTypeDescriptionId = (int) BasketItemTypeDescriptionIDs.Ordered;
+            }
+
             var orderDetails = basketItems.Select(bi => new DatabaseDefinition.Models.OrderDetail
             {
                 Id = Guid.NewGuid(),
                 OrderId = orderId,
-                BookId = bi.Book.Id,
-                OriginalPrice = bi.Book.Price,
-                FinalPrice = bi.Book.Price * (100 - bi.Book.SellOffRate) / 100,
+                OriginalPrice = bi.Book.Price * bi.Quantity,
+                FinalPrice = bi.Book.Price * bi.Quantity * (100 - bi.Book.SellOffRate) / 100,
                 BasketItemId = bi.Id
             });
 
@@ -143,7 +172,7 @@ namespace MoS.Implementations.OrderImplementations
 
             await _db.SaveChangesAsync();
 
-            return true;
+            onSuccess(orderId);
         }
     }
 }

@@ -17,6 +17,7 @@ using static MoS.Services.BookServices.FrequentlyViewedItemsService;
 using static MoS.Services.BookServices.GetBookService;
 using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using static MoS.Services.BookServices.RecommendedItemsService;
+using static MoS.Services.ElasticSearchServices.SetBookService;
 
 namespace MoS.Business.Controllers
 {
@@ -25,10 +26,12 @@ namespace MoS.Business.Controllers
     public class BookController : Controller
     {
         private readonly IApplicationDbContext _db;
+        private readonly ISetBook _elasticSetBookService;
 
-        public BookController(IApplicationDbContext db)
+        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService)
         {
             _db = db;
+            _elasticSetBookService = elasticSetBookService;
         }
 
         [HttpPost]
@@ -60,7 +63,7 @@ namespace MoS.Business.Controllers
             IActionResult response = null;
 
             await new CreateBookService(
-                new CreateBookImplementation(_db, new CommonImplementation(_db)))
+                new CreateBookImplementation(_db, new CommonImplementation(_db), _elasticSetBookService))
                 .Create(
                 request,
                 () => {
