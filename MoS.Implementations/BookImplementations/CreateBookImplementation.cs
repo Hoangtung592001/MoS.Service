@@ -67,15 +67,16 @@ namespace MoS.Implementations.BookImplementations
             var bookId = Guid.NewGuid();
 
             bool syncToElastic = false;
+            string elasticId;
 
             await _elasticSetBookService.Set(new ElasticSearchRequestBody
             {
                 Id = bookId,
-                Title = book.Title,
-                IsDeleted = false
+                Title = book.Title
             },
-            () => {
+            (responseBody) => {
                 syncToElastic = true;
+                elasticId = responseBody._Id;
             },
             () => { }
             );

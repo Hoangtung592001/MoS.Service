@@ -82,5 +82,33 @@ namespace MoS.Implementations.Helpers
 
             onSuccess(result);
         }
+
+        public static async Task DeleteAsync<T>(string url, Account account, Action<T> onSuccess, Action onFail)
+        {
+            string encoded = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
+                               .GetBytes(account.Username + ":" + account.Password));
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(url)
+            };
+
+            request.Headers.Add("Authorization", "Basic " + encoded);
+
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                onFail();
+                return;
+            }
+
+            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var result = JsonConvert.DeserializeObject<T>(responseString);
+
+            onSuccess(result);
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace MoS.Implementations.ElasticSearchImplementations
             _configuration = configuration;
         }
 
-        public async Task Set(ElasticSearchRequestBody body, Action onSuccess, Action onFail)
+        public async Task Set(ElasticSearchRequestBody body, Action<ElasticSearchResponseBody> onSuccess, Action onFail)
         {
             var account = new Account
             {
@@ -30,24 +30,16 @@ namespace MoS.Implementations.ElasticSearchImplementations
                 Password = _configuration.GetValue<string>("ElasticSearchService:Password")
             };
 
-            bool isCreated = false;
-
-            await PostAsync<ElasticSearchRequestBody, dynamic>(
-                _configuration.GetValue<string>("ElasticSearchService:Get"),
+            await PostAsync<ElasticSearchRequestBody, ElasticSearchResponseBody>(
+                _configuration.GetValue<string>("ElasticSearchService:Post"),
                 body,
                 account,
                 (responseBody) => {
-                    isCreated = true;
+                    onSuccess(responseBody);
                 },
                 () => {
+                    onFail();
                 });
-
-            if (!isCreated)
-            {
-                onFail();
-            }
-
-            onSuccess();
         }
     }
 }

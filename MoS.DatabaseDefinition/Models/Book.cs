@@ -41,5 +41,6 @@ namespace MoS.DatabaseDefinition.Models
         public List<BookImage> BookImages { get; set; }
         public BookCondition BookCondition { get; set; }
         public bool? SyncToElastic { get; set; }
+        public string? ElasticId { get; set; }
     }
 }

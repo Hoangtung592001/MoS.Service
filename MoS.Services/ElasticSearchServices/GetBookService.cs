@@ -16,16 +16,16 @@ namespace MoS.Services.ElasticSearchServices
             _repository = repository;
         }
 
-        public class Bool
+        public class MatchBoolPrefix
         {
-            [JsonPropertyName("must")]
-            public List<dynamic> Must { get; set; }
+            [JsonPropertyName("title")]
+            public string Title { get; set; }
         }
 
         public class Query
         {
-            [JsonPropertyName("bool")]
-            public Bool Bool { get; set; }
+            [JsonPropertyName("match_bool_prefix")]
+            public MatchBoolPrefix Match_bool_prefix { get; set; }
         }
 
         public class ElasticSearchBookResquestBody {
@@ -105,12 +105,12 @@ namespace MoS.Services.ElasticSearchServices
 
         public interface IGetBook
         {
-            Task<IEnumerable<Book>> Get(string title);
+            Task<IEnumerable<Book>> Get(string title, int limit);
         }
 
-        public async Task<IEnumerable<Book>> Get(string title)
+        public async Task<IEnumerable<Book>> Get(string title, int limit)
         {
-            return await _repository.Get(title);
+            return await _repository.Get(title, limit);
         }
     }
 }
