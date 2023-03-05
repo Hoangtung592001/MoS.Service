@@ -23,38 +23,15 @@ namespace MoS.Implementations.ElasticSearchImplementations
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<Book>> Get(string title)
+        public async Task<IEnumerable<Book>> Get(string title, int limit)
         {
             var searchRequest = new ElasticSearchBookResquestBody
             {
                 Query = new Query
                 {
-                    Bool = new Bool
+                    Match_bool_prefix = new MatchBoolPrefix
                     {
-                        Must = new List<dynamic>
-                        {
-                            new 
-                            {
-                                match = new
-                                {
-                                    title = new
-                                    {
-                                        query = title,
-                                        minimum_should_match = "30%"
-                                    }
-                                }
-                            },
-                            new
-                            {
-                                match = new
-                                {
-                                    isDeleted = new
-                                    {
-                                        query = 0
-                                    }
-                                }
-                            }
-                        }
+                        Title = title
                     }
                 }
             };
@@ -68,7 +45,7 @@ namespace MoS.Implementations.ElasticSearchImplementations
             };
 
             await GetAsync<ElasticSearchBookResquestBody, ElasticSearchBookResponseBody>(
-                _configuration.GetValue<string>("ElasticSearchService:Get"),
+                GetUrl(limit),
                 searchRequest,
                 account,
                 (responseBody) => {
@@ -90,6 +67,14 @@ namespace MoS.Implementations.ElasticSearchImplementations
             }
 
             return null;
+        }
+
+        private string GetUrl(int limit)
+        {
+            var url = _configuration.GetValue<string>("ElasticSearchService:Get");
+
+            return url
+                .Replace("{size}", limit.ToString());
         }
     }
 }

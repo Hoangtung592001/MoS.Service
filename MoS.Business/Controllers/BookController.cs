@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using MoS.DatabaseDefinition.Contexts;
 using MoS.Implementations.BookImplementations;
 using MoS.Implementations.CommonImplementations;
+using MoS.Implementations.ElasticSearchImplementations;
 using MoS.Models.CommonUseModels;
 using MoS.Services.BookServices;
 using MoS.Services.CommonServices;
+using MoS.Services.ElasticSearchServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ using static MoS.Services.BookServices.FrequentlyViewedItemsService;
 using static MoS.Services.BookServices.GetBookService;
 using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using static MoS.Services.BookServices.RecommendedItemsService;
+using static MoS.Services.ElasticSearchServices.DeleteBookService;
 using static MoS.Services.ElasticSearchServices.SetBookService;
 
 namespace MoS.Business.Controllers
@@ -27,11 +30,13 @@ namespace MoS.Business.Controllers
     {
         private readonly IApplicationDbContext _db;
         private readonly ISetBook _elasticSetBookService;
+        private readonly IDeleteBook _elasticDeleteBookService;
 
-        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService)
+        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService, IDeleteBook elasticDeleteBookService)
         {
             _db = db;
             _elasticSetBookService = elasticSetBookService;
+            _elasticDeleteBookService = elasticDeleteBookService;
         }
 
         [HttpPost]
@@ -115,7 +120,7 @@ namespace MoS.Business.Controllers
                     new BaseResponse<Book>
                     {
                         Success = true,
-                        Data = await new GetBookService(new GetBookImplementation(_db)).Get(BookId)
+                        Data = await new Services.BookServices.GetBookService(new Implementations.BookImplementations.GetBookImplementation(_db)).Get(BookId)
                     }
                 );
         }
@@ -127,12 +132,22 @@ namespace MoS.Business.Controllers
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
-            var isDeleted = await new DeleteBookService(new DeleteBookImplementation(_db)).Delete(BookId, credential);
+            var isDeleted = await new Services.BookServices.DeleteBookService(new Implementations.BookImplementations.DeleteBookImplementation(_db, _elasticDeleteBookService)).Delete(BookId, credential);
 
             if (!isDeleted)
             {
                 return BadRequest();
             }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [Route("SyncBookToElasticSearch")]
+        public async Task<IActionResult> SyncBookToElasticSearch()
+        {
+            await new SyncBooksToElasticSearchService(new SyncBooksToElasticSearchImplementation(_db, _elasticSetBookService)).Sync();
 
             return Ok();
         }

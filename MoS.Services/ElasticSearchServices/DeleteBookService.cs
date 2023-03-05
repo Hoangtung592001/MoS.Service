@@ -2,26 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MoS.Services.ElasticSearchServices
 {
-    public class SetBookService
+    public class DeleteBookService
     {
-        private readonly ISetBook _repository;
+        private readonly IDeleteBook _repository;
 
-        public SetBookService(ISetBook repository)
+        public DeleteBookService(IDeleteBook repository)
         {
             _repository = repository;
-        }
-
-        public class ElasticSearchRequestBody
-        {
-            [JsonPropertyName("id")]
-            public Guid Id { get; set; }
-            [JsonPropertyName("title")]
-            public string Title { get; set; }
         }
 
         public class Shards
@@ -43,14 +34,13 @@ namespace MoS.Services.ElasticSearchServices
             public int _Primary_Term { get; set; }
         }
 
-        public interface ISetBook
-        {
-            Task Set(ElasticSearchRequestBody body, Action<ElasticSearchResponseBody> onSuccess, Action onFail);
+        public interface IDeleteBook {
+            Task Delete(string elasticId, Action<ElasticSearchResponseBody> onSuccess, Action onFail);
         }
 
-        public async Task Set(ElasticSearchRequestBody body, Action<ElasticSearchResponseBody> onSuccess, Action onFail)
+        public async Task Delete(string elasticId, Action<ElasticSearchResponseBody> onSuccess, Action onFail)
         {
-            await _repository.Set(body, onSuccess, onFail);
+            await _repository.Delete(elasticId, onSuccess, onFail);
         }
     }
 }

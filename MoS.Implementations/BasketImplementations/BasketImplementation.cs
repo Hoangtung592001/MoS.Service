@@ -123,7 +123,7 @@ namespace MoS.Implementations.BasketImplementations
                                 .Include(item => item.Book)
                                 .Where(item => item.UserId.Equals(credential.Id)
                                         && item.BookId.Equals(request.BookId)
-                                        && item.Book.IsDeleted == false
+                                        && item.IsDeleted == false
                                         && item.BasketItemTypeDescriptionId == (int) BasketItemTypeDescriptionIDs.InBasket
                                         ).FirstOrDefaultAsync();
 

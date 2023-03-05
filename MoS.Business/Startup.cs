@@ -88,6 +88,8 @@ namespace MoS.Business
             services.AddScoped<SetAddressService.ISetAddress, SetAddressImplementation>();
             services.AddScoped<ShippingService.IShipping, ShippingImplementation>();
             services.AddScoped<CountryService.ICountry, CountryImplementation>();
+            services.AddScoped<Services.ElasticSearchServices.DeleteBookService.IDeleteBook, Implementations.ElasticSearchImplementations.DeleteBookImplementation>();
+            services.AddScoped<Services.ElasticSearchServices.SetBookService.ISetBook, Implementations.ElasticSearchImplementations.SetBookImplementation>();
             services.AddScoped<Services.ElasticSearchServices.GetBookService.IGetBook, Implementations.ElasticSearchImplementations.GetBookImplementation>();
             services.AddSwaggerGen(c =>
             {

@@ -26,12 +26,12 @@ namespace MoS.Business.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SearchBooks(SearchBookRequest request)
+        public async Task<IActionResult> SearchBooks(SearchBookRequest request, int limit)
         {
             return Ok(new BaseResponse<IEnumerable<Book>>
             {
                 Success = true,
-                Data = await new GetBookService(new GetBookImplementation(_db, _configuration)).Get(request.Title)
+                Data = await new GetBookService(new GetBookImplementation(_db, _configuration)).Get(request.Title, limit)
             });
         }
     }
