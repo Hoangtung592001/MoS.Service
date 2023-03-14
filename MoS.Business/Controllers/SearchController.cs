@@ -34,5 +34,16 @@ namespace MoS.Business.Controllers
                 Data = await new GetBookService(new GetBookImplementation(_db, _configuration)).Get(request.Title, limit)
             });
         }
+
+        [HttpPost]
+        [Route("Whole")]
+        public async Task<IActionResult> SearchWholeBooks(SearchBookRequest request, int limit)
+        {
+            return Ok(new BaseResponse<IEnumerable<WholeBook>>
+            {
+                Success = true,
+                Data = await new GetBookService(new GetBookImplementation(_db, _configuration)).GetWhole(request.Title, limit)
+            });
+        }
     }
 }

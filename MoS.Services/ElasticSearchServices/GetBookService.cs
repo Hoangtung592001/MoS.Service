@@ -103,14 +103,28 @@ namespace MoS.Services.ElasticSearchServices
             public string Title { get; set; }
         }
 
+        public class WholeBook
+        {
+            public Guid Id { get; set; }
+            public string Title { get; set; }
+            public string Url { get; set; }
+            public string Author { get; set; }
+        }
+
         public interface IGetBook
         {
             Task<IEnumerable<Book>> Get(string title, int limit);
+            Task<IEnumerable<WholeBook>> GetWhole(string title, int limit);
         }
 
         public async Task<IEnumerable<Book>> Get(string title, int limit)
         {
             return await _repository.Get(title, limit);
+        }
+
+        public async Task<IEnumerable<WholeBook>> GetWhole(string title, int limit)
+        {
+            return await _repository.GetWhole(title, limit);
         }
     }
 }
