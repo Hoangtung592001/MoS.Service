@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static MoS.Services.BasketServices.BasketService;
+using static MoS.Services.BasketServices.ChangeItemQuantityService;
 
 namespace MoS.Business.Controllers
 {
@@ -21,11 +22,13 @@ namespace MoS.Business.Controllers
     {
         private readonly IApplicationDbContext _db;
         private readonly CommonService _commonService;
+        private readonly IBasket _basketService;
 
-        public BasketController(IApplicationDbContext db)
+        public BasketController(IApplicationDbContext db, IBasket basketService)
         {
             _db = db;
             _commonService = new CommonService(new CommonImplementation(db));
+            _basketService = basketService;
         }
 
         [Authorize]
@@ -89,5 +92,29 @@ namespace MoS.Business.Controllers
                     }
                 );
         }
+
+        [HttpPut]
+        [Route("")]
+        public async Task<IActionResult> ChangeQuantity(ChangeItemQuantityRequest request)
+        {
+            IActionResult response = null;
+
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
+            await new ChangeItemQuantityService(
+                                new ChangeItemQuantityImplementation(_db, _basketService))
+                                .Set(credential, 
+                                request, 
+                                () => {
+                                    response = Ok();
+                                }, 
+                                () => {
+                                    response = BadRequest();
+                                });
+
+            return response;
+        }
+
+        
     }
 }
