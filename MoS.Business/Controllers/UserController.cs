@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoS.DatabaseDefinition.Contexts;
+using MoS.Implementations.AuthorImplementations;
+using MoS.Implementations.CommonImplementations;
 using MoS.Models.CommonUseModels;
+using MoS.Services.CommonServices;
 using MoS.Services.UserServices;
 using System.Threading.Tasks;
 using static MoS.Models.Constants.Enums.Exception;
@@ -79,6 +82,19 @@ namespace MoS.Business.Controllers
                     });
 
             return response;
+        }
+
+        [HttpGet]
+        [Route("CheckAdmin")]
+        public IActionResult CheckAdmin()
+        {
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
+            return Ok(new BaseResponse<bool>
+            {
+                Success = true,
+                Data = new CheckAccountService(new CheckAccountImplementation(_db)).CheckIsAdmin(credential)
+            });
         }
 
         class SignUpResponse : BaseResponse<DataSignUpResponse>
