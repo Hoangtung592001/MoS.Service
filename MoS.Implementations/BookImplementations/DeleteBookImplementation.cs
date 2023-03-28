@@ -30,10 +30,14 @@ namespace MoS.Implementations.BookImplementations
 
                 if (book.SyncToElastic == true)
                 {
-                    await _deleteBookService.Delete(book.ElasticId, (responseBody) => {
-                        book.SyncToElastic = false;
-                        book.ElasticId = null;
-                    }, () => { });
+                    try
+                    {
+                        await _deleteBookService.Delete(book.ElasticId, (responseBody) => {
+                            book.SyncToElastic = false;
+                            book.ElasticId = null;
+                        }, () => { });
+                    }
+                    catch { }
                 }
 
                 await _db.SaveChangesAsync();

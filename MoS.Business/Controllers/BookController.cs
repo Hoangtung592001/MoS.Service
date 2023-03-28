@@ -3,17 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MoS.DatabaseDefinition.Contexts;
 using MoS.Implementations.BookImplementations;
 using MoS.Implementations.CommonImplementations;
-using MoS.Implementations.ElasticSearchImplementations;
 using MoS.Models.CommonUseModels;
 using MoS.Services.BookServices;
 using MoS.Services.CommonServices;
-using MoS.Services.ElasticSearchServices;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using static MoS.Models.Constants.Enums.Exception;
 using static MoS.Services.BookServices.CreateBookService;
 using static MoS.Services.BookServices.FrequentlyViewedItemsService;
 using static MoS.Services.BookServices.GetBookService;
@@ -150,6 +145,21 @@ namespace MoS.Business.Controllers
             await new SyncBooksToElasticSearchService(new SyncBooksToElasticSearchImplementation(_db, _elasticSetBookService)).Sync();
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetAll")]
+        public IActionResult GetAllBooks()
+        {
+            var books = new GetAllBooksService(new GetAllBooksImplementation(_db)).Get();
+
+            return Ok(
+                    new BaseResponse<IEnumerable<GetAllBooksService.Book>>
+                    {
+                        Success = true,
+                        Data = books
+                    }
+                );
         }
     }
 }

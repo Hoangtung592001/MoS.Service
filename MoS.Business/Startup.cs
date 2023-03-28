@@ -30,6 +30,8 @@ using MoS.Implementations.ShippingImplementations;
 using MoS.Services.CountryServices;
 using MoS.Implementations.CountryImplementations;
 using static MoS.Services.BasketServices.ChangeItemQuantityService;
+using static MoS.Services.BookServices.GetAllBooksService;
+using static MoS.Services.UserServices.CheckAccountService;
 
 namespace MoS.Business
 {
@@ -93,7 +95,9 @@ namespace MoS.Business
             services.AddScoped<Services.ElasticSearchServices.SetBookService.ISetBook, Implementations.ElasticSearchImplementations.SetBookImplementation>();
             services.AddScoped<Services.ElasticSearchServices.GetBookService.IGetBook, Implementations.ElasticSearchImplementations.GetBookImplementation>();
             services.AddScoped<IChangeItemQuantity, ChangeItemQuantityImplementation>();
-            
+            services.AddScoped<IGetAllBooksService, GetAllBooksImplementation>();
+            services.AddScoped<ICheckAccount, CheckAccountImplementation>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });
