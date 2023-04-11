@@ -145,6 +145,12 @@ namespace MoS.Implementations.OrderImplementations
                                     bi.IsDeleted == false &&
                                     bi.Book.IsDeleted == false).ToListAsync();
 
+            foreach(var item in basketItems)
+            {
+                var selectedBook = _db.Books.Where(b => b.Id.Equals(item.BookId)).FirstOrDefault();
+                selectedBook.Quantity -= item.Quantity;
+            }
+
             foreach (var item in basketItems)
             {
                 item.BasketItemTypeDescriptionId = (int) BasketItemTypeDescriptionIDs.Ordered;

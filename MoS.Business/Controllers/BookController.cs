@@ -17,6 +17,7 @@ using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using static MoS.Services.BookServices.RecommendedItemsService;
 using static MoS.Services.BookServices.TrendingItemsService;
 using static MoS.Services.ElasticSearchServices.DeleteBookService;
+using static MoS.Services.ElasticSearchServices.PutBookService;
 using static MoS.Services.ElasticSearchServices.SetBookService;
 
 namespace MoS.Business.Controllers
@@ -28,12 +29,14 @@ namespace MoS.Business.Controllers
         private readonly IApplicationDbContext _db;
         private readonly ISetBook _elasticSetBookService;
         private readonly IDeleteBook _elasticDeleteBookService;
+        private readonly IPutBook _elasticPutBookService;
 
-        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService, IDeleteBook elasticDeleteBookService)
+        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService, IDeleteBook elasticDeleteBookService, IPutBook elasticPutBookService)
         {
             _db = db;
             _elasticSetBookService = elasticSetBookService;
             _elasticDeleteBookService = elasticDeleteBookService;
+            _elasticPutBookService = elasticPutBookService;
         }
 
         [HttpPost]
@@ -89,7 +92,7 @@ namespace MoS.Business.Controllers
             IActionResult response = null;
 
             await new EditBookService(
-                new EditBookImplementation(_db))
+                new EditBookImplementation(_db, _elasticPutBookService))
                 .Edit(
                 request,
                 () => {
