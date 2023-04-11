@@ -10,11 +10,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static MoS.Services.BookServices.CreateBookService;
+using static MoS.Services.BookServices.EditBookService;
 using static MoS.Services.BookServices.FrequentlyViewedItemsService;
 using static MoS.Services.BookServices.GetBookService;
 using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using static MoS.Services.BookServices.RecommendedItemsService;
+using static MoS.Services.BookServices.TrendingItemsService;
 using static MoS.Services.ElasticSearchServices.DeleteBookService;
+using static MoS.Services.ElasticSearchServices.PutBookService;
 using static MoS.Services.ElasticSearchServices.SetBookService;
 
 namespace MoS.Business.Controllers
@@ -26,12 +29,14 @@ namespace MoS.Business.Controllers
         private readonly IApplicationDbContext _db;
         private readonly ISetBook _elasticSetBookService;
         private readonly IDeleteBook _elasticDeleteBookService;
+        private readonly IPutBook _elasticPutBookService;
 
-        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService, IDeleteBook elasticDeleteBookService)
+        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService, IDeleteBook elasticDeleteBookService, IPutBook elasticPutBookService)
         {
             _db = db;
             _elasticSetBookService = elasticSetBookService;
             _elasticDeleteBookService = elasticDeleteBookService;
+            _elasticPutBookService = elasticPutBookService;
         }
 
         [HttpPost]
@@ -79,14 +84,38 @@ namespace MoS.Business.Controllers
             return response;
         }
 
-        [HttpGet]
-        [Route("RecentlyViewedItems")]
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        [Route("EditBook")]
+        public async Task<IActionResult> EditBook(EditBookRequest request)
+        {
+            IActionResult response = null;
+
+            await new EditBookService(
+                new EditBookImplementation(_db, _elasticPutBookService))
+                .Edit(
+                request,
+                () => {
+                    response = Ok();
+                },
+                () => {
+                    response = BadRequest();
+                });
+
+            return response;
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("RecentlyViewedItemsPost")]
         public async Task<IActionResult> GetRecentlyViewedItem(GetRecentlyViewedItemRequest request)
         {
+            var credential = new CommonService(new CommonImplementation()).GetCredential(User);
+
             return Ok(new BaseResponse<IEnumerable<RecentlyViewedItem>>
             {
                 Success = true,
-                Data = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Get(request)
+                Data = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Get(request, credential)
             });
         }
 
@@ -105,6 +134,17 @@ namespace MoS.Business.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("TrendingItems")]
+        public async Task<IActionResult> TrendingItems(int limit)
+        {
+            return Ok(new BaseResponse<IEnumerable<TrendingItem>>
+            {
+                Success = true,
+                Data = await new TrendingItemsService(new TrendingItemsImplementation(_db)).Get(limit)
+            });
         }
 
         [HttpGet]
@@ -158,6 +198,19 @@ namespace MoS.Business.Controllers
                     {
                         Success = true,
                         Data = books
+                    }
+                );
+        }
+
+        [HttpGet]
+        [Route("GetAllBookCondition")]
+        public IActionResult GetAllBookConditions()
+        {
+            return Ok(
+                    new BaseResponse<IEnumerable<Services.BookServices.GetBookConditionService.BookCondition>>
+                    {
+                        Success = true,
+                        Data = new GetBookConditionService(new GetBookConditionImplementation(_db)).GetAll()
                     }
                 );
         }

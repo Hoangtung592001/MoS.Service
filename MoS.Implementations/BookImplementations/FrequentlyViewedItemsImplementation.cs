@@ -20,30 +20,38 @@ namespace MoS.Implementations.BookImplementations
         public async Task<IEnumerable<FrequentlyViewedItem>> Get(FrequentlyViewedItemsRequest request)
         {
             var data = 
-                    await _repository.Books
+                    _repository.Books
                         .Where(book => book.IsDeleted == false)
                         .Include(book => book.Author)
-                        .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
-                            .ThenInclude(image => image.BookImageType)
-                            .OrderByDescending(book => book.NumberOfViews).Take(request.Limit)
-                        .Select(
-                            book => new FrequentlyViewedItem
-                            {
-                                Id = book.Id,
-                                Title = book.Title,
-                                Author = new Author
-                                {
-                                    Id = book.Author.Id,
-                                    Name = book.Author.Name
-                                },
-                                BookImage = new BookImage
-                                {
-                                    Id = book.BookImages.FirstOrDefault().Id,
-                                    Url = book.BookImages.FirstOrDefault().Url
-                                }
-                            }).ToListAsync();
+                        .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main));
+            var numOfViews = await _repository.UserRecentlyViewedItems
+                                    .GroupBy(u => u.BookId)
+                                    .Select(u => new
+                                    {
+                                        u.Key,
+                                        numOfView = u.Count()
+                                    }).OrderByDescending(u => u.numOfView).ToListAsync();
 
-            return data;
+            var orderedData = numOfViews.Join(data,
+                n => n.Key,
+                d => d.Id,
+                (view, book) => new FrequentlyViewedItem
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Author = new Author
+                    {
+                        Id = book.Author.Id,
+                        Name = book.Author.Name
+                    },
+                    BookImage = new BookImage
+                    {
+                        Id = book.BookImages.FirstOrDefault().Id,
+                        Url = book.BookImages.FirstOrDefault().Url
+                    }
+                }).Take(request.Limit);
+
+            return orderedData;
         }
     }
 }

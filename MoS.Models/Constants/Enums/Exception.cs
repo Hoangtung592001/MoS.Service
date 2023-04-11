@@ -38,5 +38,11 @@ namespace MoS.Models.Constants.Enums
             {"INVALID_IMAGES", new Guid("63A89635-5851-4CD3-BC03-B90F7DE409C2") },
             {"INVALID_CONDITIONS", new Guid("472F4BF4-D447-4FFC-992A-85336B89495E") }
         };
+
+        public static IDictionary<string, Guid> ChangeQuantityExceptionMessages = new Dictionary<string, Guid>() {
+            {"QUANTITY_EXCEED", new Guid("2DE53BC3-3CC6-494C-8EDD-19484008D39B") },
+            {"INVALID_QUANTITY", new Guid("34C4B3D4-8D03-4AE0-85D4-78EE99829621") },
+            {"QUANTITY_NOT_AVAILABLE", new Guid("CB18633B-501A-4803-825C-3A68E3BA6D31") },
+        };
     }
 }

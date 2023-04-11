@@ -32,6 +32,17 @@ using MoS.Implementations.CountryImplementations;
 using static MoS.Services.BasketServices.ChangeItemQuantityService;
 using static MoS.Services.BookServices.GetAllBooksService;
 using static MoS.Services.UserServices.CheckAccountService;
+using static MoS.Services.UploadServices.UploadImageService;
+using MoS.Implementations.UploadImplementations;
+using static MoS.Services.AuthorServices.GetAuthorService;
+using static MoS.Services.PublisherServices.GetPublisherService;
+using MoS.Implementations.PublisherImplementations;
+using static MoS.Services.PublisherServices.CreatePublisherService;
+using static MoS.Services.BookServices.GetBookConditionService;
+using static MoS.Services.BookServices.EditBookService;
+using static MoS.Services.BookServices.TrendingItemsService;
+using MoS.Implementations.ElasticSearchImplementations;
+using static MoS.Services.ElasticSearchServices.PutBookService;
 
 namespace MoS.Business
 {
@@ -82,10 +93,10 @@ namespace MoS.Business
             services.AddScoped<CommonService.ICommon, CommonImplementation>();
             services.AddScoped<CreateBookService.ICreateBook, CreateBookImplementation>();
             services.AddScoped<RecentlyViewedItemsService.IRecentlyViewedItems, RecentlyViewedItemsImplementation>();
-            services.AddScoped<GetBookService.IGetBook, GetBookImplementation>();
+            services.AddScoped<GetBookService.IGetBook, Implementations.BookImplementations.GetBookImplementation>();
             services.AddScoped<BasketService.IBasket, BasketImplementation>();
             services.AddScoped<OrderService.IOrder, OrderImplementation>();
-            services.AddScoped<DeleteBookService.IDeleteBook, DeleteBookImplementation>();
+            services.AddScoped<DeleteBookService.IDeleteBook, Implementations.BookImplementations.DeleteBookImplementation>();
             services.AddScoped<ExceptionService.IException, ExceptionImplementation>();
             services.AddScoped<GetAddressService.IGetAddress, GetAddressImplementation>();
             services.AddScoped<SetAddressService.ISetAddress, SetAddressImplementation>();
@@ -97,7 +108,15 @@ namespace MoS.Business
             services.AddScoped<IChangeItemQuantity, ChangeItemQuantityImplementation>();
             services.AddScoped<IGetAllBooksService, GetAllBooksImplementation>();
             services.AddScoped<ICheckAccount, CheckAccountImplementation>();
-
+            services.AddScoped<IUploadImage, UploadImageImplementation>();
+            services.AddScoped<IGetAuthor, GetAuthorImplementation>();
+            services.AddScoped<IGetPublisher, GetPublisherImplementation>();
+            services.AddScoped<ICreatePublisher, CreatePublisherImplementation>();
+            services.AddScoped<IGetBookCondition, GetBookConditionImplementation>();
+            services.AddScoped<IEditBook, EditBookImplementation>();
+            services.AddScoped<ITrendingItems, TrendingItemsImplementation>();
+            services.AddScoped<IPutBook, PutBookImplementation>();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });
@@ -115,6 +134,8 @@ namespace MoS.Business
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 
