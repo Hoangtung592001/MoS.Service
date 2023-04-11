@@ -108,8 +108,11 @@ namespace MoS.Business.Controllers
                                 () => {
                                     response = Ok();
                                 }, 
-                                () => {
-                                    response = BadRequest();
+                                (exceptionId) => {
+                                    response = Ok(new ExceptionResponse
+                                    {
+                                        ExceptionId = exceptionId
+                                    });
                                 });
 
             return response;

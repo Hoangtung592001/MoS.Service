@@ -49,13 +49,13 @@ namespace MoS.Services.BookServices
 
         public interface IRecentlyViewedItems
         {
-            Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request);
+            Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request, Credential credential);
             Task<bool> Set(SetRecentlyViewedItemRequest request, Credential credential);
         }
 
-        public async Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request)
+        public async Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request, Credential credential)
         {
-            return await _repository.Get(request);
+            return await _repository.Get(request, credential);
         }
 
         public async Task<bool> Set(SetRecentlyViewedItemRequest request, Credential credential)

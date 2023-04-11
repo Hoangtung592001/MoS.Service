@@ -22,4 +22,8 @@
     <ProjectReference Include="..\MoS.Services\MoS.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

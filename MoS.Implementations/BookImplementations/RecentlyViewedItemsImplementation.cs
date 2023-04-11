@@ -6,6 +6,7 @@ using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using System.Linq;
 using static MoS.Models.Constants.Enums.BookImageTypes;
 using MoS.Models.CommonUseModels;
+using System;
 
 namespace MoS.Implementations.BookImplementations
 {
@@ -18,30 +19,40 @@ namespace MoS.Implementations.BookImplementations
             _db = db;
         }
 
-        public async Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request)
+        public async Task<IEnumerable<RecentlyViewedItem>> Get(GetRecentlyViewedItemRequest request, Credential credential)
         {
-            var data = await (from viewedItem in _db.UserRecentlyViewedItems
-                        join book in _db.Books on viewedItem.BookId equals book.Id
-                        join author in _db.Authors on book.AuthorId equals author.Id
-                        join bookImage in _db.BookImages on book.Id equals bookImage.BookId 
-                        where bookImage.BookImageTypeId == (int) BookImageTypeTDs.Main && book.IsDeleted == false
-                              orderby viewedItem.ViewedAt descending
-                        select new RecentlyViewedItem
+            var items = _db.UserRecentlyViewedItems
+                .Where(c => c.UserId.Equals(credential.Id))
+                .OrderByDescending(x => x.ViewedAt)
+                .Select(c => c.BookId);
+
+            var distinctItems = new HashSet<Guid>(items).ToList();
+
+            var books =
+                    await _db.Books
+                        .Where(book => book.IsDeleted == false && distinctItems.Contains(book.Id))
+                        .Include(book => book.Author)
+                        .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main)).ToListAsync();
+            
+            var data = distinctItems.Join(books,
+                        i => i,
+                        b => b.Id,
+                        (item, book) => new RecentlyViewedItem
                         {
                             Id = book.Id,
                             Title = book.Title,
                             Author = new Author
                             {
-                                Id = author.Id,
-                                Name = author.Name
+                                Id = book.Author.Id,
+                                Name = book.Author.Name
                             },
                             BookImage = new BookImage
                             {
-                                Id = bookImage.Id,
-                                Url = bookImage.Url
+                                Id = book.BookImages.FirstOrDefault().Id,
+                                Url = book.BookImages.FirstOrDefault().Url
                             }
-                        }).ToListAsync()
-                        ;
+                        }
+                    ).Take(request.Limit);
 
             return data;
         }

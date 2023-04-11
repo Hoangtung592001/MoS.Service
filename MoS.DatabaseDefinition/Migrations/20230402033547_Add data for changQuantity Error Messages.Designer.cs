@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoS.DatabaseDefinition.Contexts;
 
 namespace MoS.DatabaseDefinition.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230402033547_Add data for changQuantity Error Messages")]
+    partial class AdddataforchangQuantityErrorMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -491,7 +493,7 @@ namespace MoS.DatabaseDefinition.Migrations
                         new
                         {
                             Id = new Guid("2de53bc3-3cc6-494c-8edd-19484008d39b"),
-                            Description = "The selected quantity exceeds quantity available in stock.",
+                            Description = "The selected quantity exceeds quantity avaiable in stock.",
                             ExceptionMessageType = "QUANTITY_EXCEED",
                             IsDeleted = false
                         },
@@ -500,13 +502,6 @@ namespace MoS.DatabaseDefinition.Migrations
                             Id = new Guid("34c4b3d4-8d03-4ae0-85d4-78ee99829621"),
                             Description = "The selected quantity is invalid.",
                             ExceptionMessageType = "INVALID_QUANTITY",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("cb18633b-501a-4803-825c-3a68e3ba6d31"),
-                            Description = "The selected basket item is not available.",
-                            ExceptionMessageType = "QUANTITY_NOT_AVAILABLE",
                             IsDeleted = false
                         });
                 });

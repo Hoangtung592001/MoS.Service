@@ -24,10 +24,10 @@ namespace MoS.Services.BasketServices
 
         public interface IChangeItemQuantity
         {
-            Task Set(Credential credential, ChangeItemQuantityRequest request, Action onSuccess, Action onFail);
+            Task Set(Credential credential, ChangeItemQuantityRequest request, Action onSuccess, Action<Guid> onFail);
         }
 
-        public async Task Set(Credential credential, ChangeItemQuantityRequest request, Action onSuccess, Action onFail)
+        public async Task Set(Credential credential, ChangeItemQuantityRequest request, Action onSuccess, Action<Guid> onFail)
         {
             await _repository.Set(credential, request, onSuccess, onFail);
         }

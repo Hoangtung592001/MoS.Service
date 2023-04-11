@@ -32,6 +32,15 @@ using MoS.Implementations.CountryImplementations;
 using static MoS.Services.BasketServices.ChangeItemQuantityService;
 using static MoS.Services.BookServices.GetAllBooksService;
 using static MoS.Services.UserServices.CheckAccountService;
+using static MoS.Services.UploadServices.UploadImageService;
+using MoS.Implementations.UploadImplementations;
+using static MoS.Services.AuthorServices.GetAuthorService;
+using static MoS.Services.PublisherServices.GetPublisherService;
+using MoS.Implementations.PublisherImplementations;
+using static MoS.Services.PublisherServices.CreatePublisherService;
+using static MoS.Services.BookServices.GetBookConditionService;
+using static MoS.Services.BookServices.EditBookService;
+using static MoS.Services.BookServices.TrendingItemsService;
 
 namespace MoS.Business
 {
@@ -97,6 +106,14 @@ namespace MoS.Business
             services.AddScoped<IChangeItemQuantity, ChangeItemQuantityImplementation>();
             services.AddScoped<IGetAllBooksService, GetAllBooksImplementation>();
             services.AddScoped<ICheckAccount, CheckAccountImplementation>();
+            services.AddScoped<IUploadImage, UploadImageImplementation>();
+            services.AddScoped<IGetAuthor, GetAuthorImplementation>();
+            services.AddScoped<IGetPublisher, GetPublisherImplementation>();
+            services.AddScoped<ICreatePublisher, CreatePublisherImplementation>();
+            services.AddScoped<IGetBookCondition, GetBookConditionImplementation>();
+            services.AddScoped<IEditBook, EditBookImplementation>();
+            services.AddScoped<ITrendingItems, TrendingItemsImplementation>();
+
 
             services.AddSwaggerGen(c =>
             {
@@ -115,6 +132,8 @@ namespace MoS.Business
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 

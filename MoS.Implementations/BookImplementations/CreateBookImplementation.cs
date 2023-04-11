@@ -68,18 +68,21 @@ namespace MoS.Implementations.BookImplementations
 
             bool syncToElastic = false;
             string elasticId;
-
-            await _elasticSetBookService.Set(new ElasticSearchRequestBody
+            try
             {
-                Id = bookId,
-                Title = book.Title
-            },
-            (responseBody) => {
-                syncToElastic = true;
-                elasticId = responseBody._Id;
-            },
-            () => { }
-            );
+                await _elasticSetBookService.Set(new ElasticSearchRequestBody
+                {
+                    Id = bookId,
+                    Title = book.Title
+                },
+                (responseBody) => {
+                    syncToElastic = true;
+                    elasticId = responseBody._Id;
+                },
+                () => { }
+                );
+            }
+            catch { }
 
             _repository.Books.Add(new DatabaseDefinition.Models.Book
             {

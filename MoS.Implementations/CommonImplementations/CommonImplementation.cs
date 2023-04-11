@@ -70,5 +70,10 @@ namespace MoS.Implementations.CommonImplementations
             item.DeletedAt = DateTime.Now;
             item.DeletedBy = deletedBy;
         }
+
+        public string GetFileName(string fileName, string userId)
+        {
+            return userId + "-" + Guid.NewGuid() + "-" + fileName;
+        }
     }
 }

@@ -91,6 +91,27 @@ namespace MoS.DatabaseDefinition.Contexts
                 Description = "This condition does not exist"
             });
 
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = ChangeQuantityExceptionMessages["QUANTITY_EXCEED"],
+                ExceptionMessageType = "QUANTITY_EXCEED",
+                Description = "The selected quantity exceeds quantity available in stock."
+            });
+
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = ChangeQuantityExceptionMessages["INVALID_QUANTITY"],
+                ExceptionMessageType = "INVALID_QUANTITY",
+                Description = "The selected quantity is invalid."
+            });
+            modelBuilder.Entity<Exception>().HasData(new Exception
+            {
+                Id = ChangeQuantityExceptionMessages["QUANTITY_NOT_AVAILABLE"],
+                ExceptionMessageType = "QUANTITY_NOT_AVAILABLE",
+                Description = "The selected basket item is not available."
+            });
+            
+
             modelBuilder.Entity<PaymentOptionTypeDescription>().HasData(new PaymentOptionTypeDescription
             {
                 Id = 1,
