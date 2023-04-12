@@ -9,6 +9,7 @@ using System;
 using MoS.Services.CommonServices;
 using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Models.Constants.Enums.BasketItemTypeDescription;
+using static MoS.Models.Constants.Enums.Exception;
 
 namespace MoS.Implementations.BasketImplementations
 {
@@ -89,7 +90,8 @@ namespace MoS.Implementations.BasketImplementations
                                         Id = item.Book.BookImages.FirstOrDefault(image => image.BookImageTypeId == (int) BookImageTypeTDs.Main).Id,
                                         Url = item.Book.BookImages.FirstOrDefault(image => image.BookImageTypeId == (int) BookImageTypeTDs.Main).Url,
                                     }
-                                }
+                                },
+                                IsQuantityValid = item.Book.Quantity >= item.Quantity
                             }
                         )
                 ).ToList();
@@ -110,13 +112,19 @@ namespace MoS.Implementations.BasketImplementations
             return data;
         }
 
-        public async Task<bool> Set(SetBasketRequest request, Credential credential)
+        public async Task Set(SetBasketRequest request, Credential credential, Action onSuccess, Action<Guid> onFail)
         {
             var book = _db.Books.Where(book => book.Id.Equals(request.BookId) && book.IsDeleted == false).FirstOrDefault();
 
             if (book == null)
             {
-                return false;
+                onFail(Guid.Empty);
+            }
+
+            if (book.Quantity < request.Quantity)
+            {
+                onFail(ChangeQuantityExceptionMessages["QUANTITY_EXCEED"]);
+                return;
             }
 
             var basketItem = await _db.BasketItems
@@ -147,7 +155,7 @@ namespace MoS.Implementations.BasketImplementations
 
             await _db.SaveChangesAsync();
 
-            return true;
+            onSuccess();
         }
 
         public async Task<int> GetTotal(Credential credential)

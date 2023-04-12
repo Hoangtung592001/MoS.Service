@@ -102,7 +102,7 @@ namespace MoS.Services.OrderServices
         public interface IOrder
         {
             IEnumerable<Order> Get(Credential credential);
-            Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action onFail);
+            Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action<Guid> onFail);
         }
 
         public IEnumerable<Order> Get(Credential credential)
@@ -110,7 +110,7 @@ namespace MoS.Services.OrderServices
             return _repository.Get(credential);
         }
 
-        public async Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action onFail)
+        public async Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action<Guid> onFail)
         {
             await _repository.Set(request, credential, onSuccess, onFail);
         }

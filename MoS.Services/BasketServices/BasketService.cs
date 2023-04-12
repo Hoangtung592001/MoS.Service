@@ -62,6 +62,7 @@ namespace MoS.Services.BasketServices
             public Guid BookId { get; set; }
             public Guid UserId { get; set; }
             public Book Book { get; set; }
+            public bool? IsQuantityValid { get; set; }
         }
 
         public class Basket
@@ -73,7 +74,7 @@ namespace MoS.Services.BasketServices
         public interface IBasket
         {
             Task<Basket> Get(Credential credential);
-            Task<bool> Set(SetBasketRequest request, Credential credential);
+            Task Set(SetBasketRequest request, Credential credential, Action onSuccess, Action<Guid> onFail);
             Task<bool> Delete(Guid BasketItemId, Credential credential);
             Task<int> GetTotal(Credential credential);
         }
@@ -83,9 +84,9 @@ namespace MoS.Services.BasketServices
             return await _repository.Get(credential);
         }
 
-        public async Task<bool> Set(SetBasketRequest request, Credential credential)
+        public async Task Set(SetBasketRequest request, Credential credential, Action onSuccess, Action<Guid> onFail)
         {
-            return await _repository.Set(request, credential);
+            await _repository.Set(request, credential, onSuccess, onFail);
         }
 
 

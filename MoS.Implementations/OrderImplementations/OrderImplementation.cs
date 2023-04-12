@@ -12,6 +12,7 @@ using static MoS.Models.Constants.Enums.BookImageTypes;
 using static MoS.Models.Constants.Enums.OrderStatus;
 using static MoS.Services.OrderServices.OrderService;
 using static MoS.Services.ShippingServices.ShippingService;
+using static MoS.Models.Constants.Enums.Exception;
 
 namespace MoS.Implementations.OrderImplementations
 {
@@ -127,13 +128,13 @@ namespace MoS.Implementations.OrderImplementations
             return orders;
         }
 
-        public async Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action onFail)
+        public async Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action<Guid> onFail)
         {
             var address = _db.Addresses.Where(a => a.Id.Equals(request.AddressId) && a.IsDeleted == false).FirstOrDefault();
 
             if (address == null)
             {
-                onFail();
+                onFail(Guid.Empty);
             }
 
             var shippingFee = _shippingService.Get(address.Id);
@@ -146,6 +147,18 @@ namespace MoS.Implementations.OrderImplementations
                                     bi.Book.IsDeleted == false).ToListAsync();
 
             foreach(var item in basketItems)
+            {
+                var selectedBook = _db.Books.Where(b => b.Id.Equals(item.BookId)).FirstOrDefault();
+
+                if (item.Quantity > selectedBook.Quantity)
+                {
+                    onFail(ChangeQuantityExceptionMessages["QUANTITY_EXCEED"]);
+                    return;
+                }
+            }
+
+
+            foreach (var item in basketItems)
             {
                 var selectedBook = _db.Books.Where(b => b.Id.Equals(item.BookId)).FirstOrDefault();
                 selectedBook.Quantity -= item.Quantity;

@@ -50,16 +50,23 @@ namespace MoS.Business.Controllers
         [HttpPost]
         public async Task<IActionResult> SetBasket(SetBasketRequest request)
         {
+            IActionResult response = null;
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
             
-            var isItemCreated = await new BasketService(new BasketImplementation(_db)).Set(request, credential);
-            
-            if (!isItemCreated)
-            {
-                return BadRequest();
-            }
+            await new BasketService(new BasketImplementation(_db)).Set(
+                request, 
+                credential,
+                () => {
+                    response = Ok();
+                },
+                (exceptionId) => {
+                    response = Ok(new ExceptionResponse
+                    {
+                        ExceptionId = exceptionId
+                    });
+                });
 
-            return Ok();
+            return response;
         }
 
         [HttpDelete]

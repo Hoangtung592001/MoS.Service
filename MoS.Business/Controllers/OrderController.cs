@@ -61,11 +61,12 @@ namespace MoS.Business.Controllers
                                 Data = orderId
                             });
                         },
-                        () =>
-                        {
-                            response = BadRequest();
-                        }
-                        );
+                        (exceptionId) => {
+                            response = Ok(new ExceptionResponse
+                            {
+                                ExceptionId = exceptionId
+                            });
+                        });
 
 
             return response;
