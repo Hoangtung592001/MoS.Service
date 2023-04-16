@@ -83,7 +83,8 @@ namespace MoS.Business
                     (Configuration["Jwt:Key"]))
                 };
             });
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
+            var connectionString = Configuration.GetConnectionString("Default");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             services.AddScoped<IApplicationDbContext>(provider =>
                     provider.GetService<ApplicationDbContext>());
             services.AddScoped<TokenService.ITokenService, TokenImplementation>();

@@ -60,7 +60,7 @@ namespace MoS.Implementations.OrderImplementations
                             .Include(order => order.Address)
                             .Where(order => order.IsDeleted == false &&
                                             order.UserId.Equals(credential.Id) &&
-                                            order.OrderDetails.Any(od => od.IsDeleted == false && od.BasketItem.IsDeleted == false && od.BasketItem.Book.IsDeleted == false))
+                                            order.OrderDetails.All(od => od.IsDeleted == false))
                             .OrderByDescending(order => order.CreatedAt)
                             .Select(order => new Order
                             {
@@ -117,7 +117,8 @@ namespace MoS.Implementations.OrderImplementations
                                                     {
                                                         Id = orderDetail.BasketItem.Book.BookCondition.Id,
                                                         Name = orderDetail.BasketItem.Book.BookCondition.Name
-                                                    }
+                                                    },
+                                                    IsDeleted = orderDetail.BasketItem.Book.IsDeleted
                                                 }
                                             }
                                         }

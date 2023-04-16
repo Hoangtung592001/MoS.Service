@@ -24,7 +24,7 @@ namespace MoS.Implementations.AddressImplementations
             _repository.Addresses.Add(
                     new DatabaseDefinition.Models.Address
                     {
-                        Id = Guid.NewGuid(),
+                        Id = addressId,
                         UserId = credential.Id,
                         AddressLine = address.AddressLine,
                         Longitude = address.Longitude,
