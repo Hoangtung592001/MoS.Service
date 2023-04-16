@@ -53,6 +53,7 @@ namespace MoS.Services.OrderServices
             public Publisher Publisher { get; set; }
             public BookImage BookImage { get; set; }
             public BookCondition BookCondition { get; set; }
+            public bool IsDeleted { get; set; }
         }
 
         public class BasketItem

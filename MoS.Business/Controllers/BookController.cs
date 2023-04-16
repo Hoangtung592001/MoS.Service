@@ -9,6 +9,7 @@ using MoS.Services.CommonServices;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static MoS.Services.BasketServices.BasketService;
 using static MoS.Services.BookServices.CreateBookService;
 using static MoS.Services.BookServices.EditBookService;
 using static MoS.Services.BookServices.FrequentlyViewedItemsService;
@@ -16,6 +17,7 @@ using static MoS.Services.BookServices.GetBookService;
 using static MoS.Services.BookServices.RecentlyViewedItemsService;
 using static MoS.Services.BookServices.RecommendedItemsService;
 using static MoS.Services.BookServices.TrendingItemsService;
+using static MoS.Services.CommonServices.CommonService;
 using static MoS.Services.ElasticSearchServices.DeleteBookService;
 using static MoS.Services.ElasticSearchServices.PutBookService;
 using static MoS.Services.ElasticSearchServices.SetBookService;
@@ -30,20 +32,23 @@ namespace MoS.Business.Controllers
         private readonly ISetBook _elasticSetBookService;
         private readonly IDeleteBook _elasticDeleteBookService;
         private readonly IPutBook _elasticPutBookService;
+        private readonly ICommon _commonService;
 
-        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService, IDeleteBook elasticDeleteBookService, IPutBook elasticPutBookService)
+        public BookController(IApplicationDbContext db, ISetBook elasticSetBookService, IDeleteBook elasticDeleteBookService, IPutBook elasticPutBookService, ICommon commonService)
         {
             _db = db;
             _elasticSetBookService = elasticSetBookService;
             _elasticDeleteBookService = elasticDeleteBookService;
             _elasticPutBookService = elasticPutBookService;
+            _commonService = commonService;
         }
 
         [HttpPost]
         [Route("FrequentlyViewedItems")]
         public async Task<IActionResult> FrequentlyViewedItems(FrequentlyViewedItemsRequest request)
         {
-            return Ok(new BaseResponse<IEnumerable<FrequentlyViewedItem>> {
+            return Ok(new BaseResponse<IEnumerable<FrequentlyViewedItem>>
+            {
                 Success = true,
                 Data = await new FrequentlyViewedItemsService(new FrequentlyViewedItemsImplementation(_db)).Get(request)
             });
@@ -125,7 +130,7 @@ namespace MoS.Business.Controllers
         public async Task<IActionResult> SetRecentlyViewedItem(SetRecentlyViewedItemRequest request)
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
-            
+
             var isCreated = await new RecentlyViewedItemsService(new RecentlyViewedItemsImplementation(_db)).Set(request, credential);
 
             if (isCreated)
@@ -152,7 +157,7 @@ namespace MoS.Business.Controllers
         public async Task<IActionResult> GetBookDetails(Guid BookId)
         {
             return Ok(
-                    new BaseResponse<Book>
+                    new BaseResponse<GetBookService.Book>
                     {
                         Success = true,
                         Data = await new Services.BookServices.GetBookService(new Implementations.BookImplementations.GetBookImplementation(_db)).Get(BookId)
@@ -167,7 +172,7 @@ namespace MoS.Business.Controllers
         {
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
 
-            var isDeleted = await new Services.BookServices.DeleteBookService(new Implementations.BookImplementations.DeleteBookImplementation(_db, _elasticDeleteBookService)).Delete(BookId, credential);
+            var isDeleted = await new Services.BookServices.DeleteBookService(new Implementations.BookImplementations.DeleteBookImplementation(_db, _elasticDeleteBookService, _commonService)).Delete(BookId, credential);
 
             if (!isDeleted)
             {

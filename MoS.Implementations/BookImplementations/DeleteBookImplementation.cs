@@ -3,14 +3,22 @@ using MoS.Models.CommonUseModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using static MoS.Services.BookServices.DeleteBookService;
-using static MoS.Services.ElasticSearchServices.DeleteBookService;
+using static MoS.Services.CommonServices.CommonService;
 namespace MoS.Implementations.BookImplementations
 {
     public class DeleteBookImplementation : Services.BookServices.DeleteBookService.IDeleteBook
     {
         private readonly IApplicationDbContext _db;
         private readonly Services.ElasticSearchServices.DeleteBookService.IDeleteBook _deleteBookService;
+        private readonly ICommon _commonService;
+
+        public DeleteBookImplementation(IApplicationDbContext db, Services.ElasticSearchServices.DeleteBookService.IDeleteBook deleteBookService, ICommon commonService)
+        {
+            _db = db;
+            _deleteBookService = deleteBookService;
+            _commonService = commonService;
+        }
+
 
         public DeleteBookImplementation(IApplicationDbContext db, Services.ElasticSearchServices.DeleteBookService.IDeleteBook deleteBookService)
         {
@@ -22,11 +30,18 @@ namespace MoS.Implementations.BookImplementations
         {
             var book = _db.Books.SingleOrDefault(b => b.Id.Equals(BookId) && b.IsDeleted == false);
 
+            var basketItems = _db.BasketItems.Where(bi => bi.BookId.Equals(BookId));
+
             if (book != null)
             {
                 book.IsDeleted = true;
                 book.DeletedAt = DateTime.Now;
                 book.DeletedBy = credential.Id;
+
+                foreach (var basketItem in basketItems)
+                {
+                    _commonService.DeleteItem(basketItem, credential.Id);
+                }
 
                 if (book.SyncToElastic == true)
                 {
