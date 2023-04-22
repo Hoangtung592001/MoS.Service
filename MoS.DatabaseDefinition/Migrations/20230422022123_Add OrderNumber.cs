@@ -2,15 +2,16 @@
 
 namespace MoS.DatabaseDefinition.Migrations
 {
-    public partial class AddColumnCalledOrdernumberOnOrdersTable : Migration
+    public partial class AddOrderNumber : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
                 name: "OrderNumber",
                 table: "Orders",
-                type: "nvarchar(max)",
-                nullable: true);
+                type: "longtext",
+                nullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

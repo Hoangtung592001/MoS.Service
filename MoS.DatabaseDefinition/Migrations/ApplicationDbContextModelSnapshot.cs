@@ -527,7 +527,7 @@ namespace MoS.DatabaseDefinition.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("OrderNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("OrderStatusId")
                         .HasColumnType("int");
