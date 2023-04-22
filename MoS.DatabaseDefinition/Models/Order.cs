@@ -16,6 +16,7 @@ namespace MoS.DatabaseDefinition.Models
         public Guid? AddressId { get; set; }
         [Required]
         public double ShippingFee { get; set; } = 0;
+        public string? OrderNumber { get; set; }
         public int OrderStatusId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;

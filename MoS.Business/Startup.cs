@@ -43,6 +43,7 @@ using static MoS.Services.BookServices.EditBookService;
 using static MoS.Services.BookServices.TrendingItemsService;
 using MoS.Implementations.ElasticSearchImplementations;
 using static MoS.Services.ElasticSearchServices.PutBookService;
+using static MoS.Services.OrderServices.GenerateOrderNumberService;
 
 namespace MoS.Business
 {
@@ -116,7 +117,10 @@ namespace MoS.Business
             services.AddScoped<IEditBook, EditBookImplementation>();
             services.AddScoped<ITrendingItems, TrendingItemsImplementation>();
             services.AddScoped<IPutBook, PutBookImplementation>();
+            services.AddScoped<IGenerateOrderNumber, GenerateOrderNumberImplementation>();
             
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoS.Business", Version = "v1" });
