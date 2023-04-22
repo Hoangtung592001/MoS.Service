@@ -13,6 +13,7 @@ using static MoS.Models.Constants.Enums.OrderStatus;
 using static MoS.Services.OrderServices.OrderService;
 using static MoS.Services.ShippingServices.ShippingService;
 using static MoS.Models.Constants.Enums.Exception;
+using static MoS.Services.OrderServices.GenerateOrderNumberService;
 
 namespace MoS.Implementations.OrderImplementations
 {
@@ -20,11 +21,19 @@ namespace MoS.Implementations.OrderImplementations
     {
         private readonly IApplicationDbContext _db;
         private readonly IShipping _shippingService;
+        private readonly IGenerateOrderNumber _generateOrderNumberService;
 
         public OrderImplementation(IApplicationDbContext db, IShipping shippingService)
         {
             _db = db;
             _shippingService = shippingService;
+        }
+
+        public OrderImplementation(IApplicationDbContext db, IShipping shippingService, IGenerateOrderNumber generateOrderNumberService)
+        {
+            _db = db;
+            _shippingService = shippingService;
+            _generateOrderNumberService = generateOrderNumberService;
         }
 
         public OrderImplementation(IApplicationDbContext db)
@@ -129,7 +138,7 @@ namespace MoS.Implementations.OrderImplementations
             return orders;
         }
 
-        public async Task Set(SetOrderRequest request, Credential credential, Action<Guid> onSuccess, Action<Guid> onFail)
+        public async Task Set(SetOrderRequest request, Credential credential, Action<string> onSuccess, Action<Guid> onFail)
         {
             var address = _db.Addresses.Where(a => a.Id.Equals(request.AddressId) && a.IsDeleted == false).FirstOrDefault();
 
@@ -140,6 +149,7 @@ namespace MoS.Implementations.OrderImplementations
 
             var shippingFee = _shippingService.Get(address.Id);
             var orderId = Guid.NewGuid();
+            var orderNumber = _generateOrderNumberService.Generate();
             var basketItems = await _db.BasketItems
                                 .Include(bi => bi.Book)
                                 .Where(bi =>
@@ -186,13 +196,14 @@ namespace MoS.Implementations.OrderImplementations
                 AddressId = request.AddressId,
                 ShippingFee = shippingFee,
                 OrderStatusId = (int)OrderStatusIDs.PREPARING,
+                OrderNumber = orderNumber
             });
 
             _db.OrderDetails.AddRange(orderDetails);
 
             await _db.SaveChangesAsync();
 
-            onSuccess(orderId);
+            onSuccess(orderNumber);
         }
     }
 }
