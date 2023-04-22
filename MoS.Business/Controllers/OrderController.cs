@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static MoS.Services.OrderServices.GenerateOrderNumberService;
 using static MoS.Services.OrderServices.OrderService;
 using static MoS.Services.ShippingServices.ShippingService;
 
@@ -21,11 +22,13 @@ namespace MoS.Business.Controllers
     {
         private readonly IApplicationDbContext _db;
         private readonly IShipping _shippingService;
+        private readonly IGenerateOrderNumber _generateOrderNumberService;
 
-        public OrderController(IApplicationDbContext db, IShipping shippingService)
+        public OrderController(IApplicationDbContext db, IShipping shippingService, IGenerateOrderNumber generateOrderNumberService)
         {
             _db = db;
             _shippingService = shippingService;
+            _generateOrderNumberService = generateOrderNumberService;
         }
 
         [Authorize]
@@ -50,12 +53,12 @@ namespace MoS.Business.Controllers
             var credential = new CommonService(new CommonImplementation()).GetCredential(User);
             IActionResult response = null;
 
-            await new OrderService(new OrderImplementation(_db, _shippingService))
+            await new OrderService(new OrderImplementation(_db, _shippingService, _generateOrderNumberService))
                     .Set(request, 
                         credential,
                         (orderId) =>
                         {
-                            response = Ok(new BaseResponse<Guid>
+                            response = Ok(new BaseResponse<string>
                             {
                                 Success = true,
                                 Data = orderId
