@@ -3,6 +3,7 @@ using MoS.Models.CommonUseModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using static MoS.Models.Constants.Enums.BasketItemTypeDescription;
 using static MoS.Services.CommonServices.CommonService;
 namespace MoS.Implementations.BookImplementations
 {
@@ -30,7 +31,7 @@ namespace MoS.Implementations.BookImplementations
         {
             var book = _db.Books.SingleOrDefault(b => b.Id.Equals(BookId) && b.IsDeleted == false);
 
-            var basketItems = _db.BasketItems.Where(bi => bi.BookId.Equals(BookId));
+            var basketItems = _db.BasketItems.Where(bi => bi.BookId.Equals(BookId) && bi.IsDeleted == false && bi.BasketItemTypeDescriptionId == (int) BasketItemTypeDescriptionIDs.InBasket);
 
             if (book != null)
             {

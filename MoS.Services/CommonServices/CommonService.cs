@@ -20,7 +20,7 @@ namespace MoS.Services.CommonServices
             Task<bool> CheckAuthorExist(Guid authorId);
             Task<bool> CheckPublisherExist(Guid publisherId);
             Credential GetCredential(ClaimsPrincipal User);
-            double SellOfPrice(double originalPrice, double sellOffRate);
+            decimal SellOfPrice(double originalPrice, double sellOffRate);
             void DeleteItem(dynamic item, Guid deletedBy);
             string GetFileName(string fileName, string userId);
         }
@@ -40,7 +40,7 @@ namespace MoS.Services.CommonServices
             return _repository.GetCredential(User);
         }
 
-        public double SellOfPrice(double originalPrice, double sellOffRate)
+        public decimal SellOfPrice(double originalPrice, double sellOffRate)
         {
             return _repository.SellOfPrice(originalPrice, sellOffRate);
         }

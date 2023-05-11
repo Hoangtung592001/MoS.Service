@@ -96,7 +96,7 @@ namespace MoS.Implementations.BasketImplementations
                         )
                 ).ToList();
 
-            double orderTotal = 0;
+            decimal orderTotal = 0;
 
             foreach(BasketItem item in basketItems)
             {
