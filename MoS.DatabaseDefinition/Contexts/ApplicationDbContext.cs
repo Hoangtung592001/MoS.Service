@@ -25,6 +25,8 @@ namespace MoS.DatabaseDefinition.Contexts
             modelBuilder.Entity<BookImageType>().HasData(new BookImageType { Id = (int) BookImageTypeTDs.Main, Name = "Main" });
             modelBuilder.Entity<BookImageType>().HasData(new BookImageType { Id = (int)BookImageTypeTDs.Sub, Name = "Sub" });
             modelBuilder.Entity<BookCondition>().HasData(new BookCondition { Id = (int)BookConditionIDs.Fine, Name = "Fine" });
+            modelBuilder.Entity<BookCondition>().HasData(new BookCondition { Id = (int)BookConditionIDs.New, Name = "New" });
+            modelBuilder.Entity<BookCondition>().HasData(new BookCondition { Id = (int)BookConditionIDs.Old, Name = "Old" });
             modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.PREPARING, Name = "Preparing" });
             modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.PREPARED, Name = "Prepared" });
             modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus { Id = (int)OrderStatusIDs.DELIVERING, Name = "Delivering" });
