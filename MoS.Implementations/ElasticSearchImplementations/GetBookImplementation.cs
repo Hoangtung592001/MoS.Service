@@ -39,6 +39,7 @@ namespace MoS.Implementations.ElasticSearchImplementations
             };
 
             ElasticSearchBookResponseBody response = null;
+            IEnumerable<Book> data = null;
 
             var account = new Account
             {
@@ -46,29 +47,39 @@ namespace MoS.Implementations.ElasticSearchImplementations
                 Password = _configuration.GetValue<string>("ElasticSearchService:Password")
             };
 
-            await GetAsync<ElasticSearchBookResquestBody, ElasticSearchBookResponseBody>(
-                GetUrl(limit),
-                searchRequest,
-                account,
-                (responseBody) => {
-                    response = responseBody;
-                },
-                () => {
 
-                });
-            
-            if (response != null)
+            try
             {
-                var data = response.Hits.hits.Select(hit => new Book
-                {
-                    Id = hit._source.Id,
-                    Title = hit._source.Title
-                });
+                await GetAsync<ElasticSearchBookResquestBody, ElasticSearchBookResponseBody>(
+                    GetUrl(limit),
+                    searchRequest,
+                    account,
+                    (responseBody) => {
+                        response = responseBody;
+                    },
+                    () => {
 
-                return data;
+                    });
+
+                if (response != null)
+                {
+                    data = response.Hits.hits.Select(hit => new Book
+                    {
+                        Id = hit._source.Id,
+                        Title = hit._source.Title
+                    });
+                }
+            }
+            catch
+            {
+                data = _db.Books.Where(b => b.Title.Contains(title) && b.IsDeleted == false).Select(b => new Book
+                {
+                    Id = b.Id,
+                    Title = b.Title
+                });
             }
 
-            return null;
+            return data;
         }
 
 
@@ -95,6 +106,7 @@ namespace MoS.Implementations.ElasticSearchImplementations
             };
 
             ElasticSearchBookResponseBody response = null;
+            IEnumerable<Book> data = null;
 
             var account = new Account
             {
@@ -102,43 +114,52 @@ namespace MoS.Implementations.ElasticSearchImplementations
                 Password = _configuration.GetValue<string>("ElasticSearchService:Password")
             };
 
-            await GetAsync<ElasticSearchBookResquestBody, ElasticSearchBookResponseBody>(
-                GetUrl(limit),
-                searchRequest,
-                account,
-                (responseBody) => {
-                    response = responseBody;
-                },
-                () => {
-
-                });
-
-            if (response != null)
+            try
             {
-                var data = response.Hits.hits.Select(hit => new Book
+                await GetAsync<ElasticSearchBookResquestBody, ElasticSearchBookResponseBody>(
+                    GetUrl(limit),
+                    searchRequest,
+                    account,
+                    (responseBody) => {
+                        response = responseBody;
+                    },
+                    () => {
+
+                    });
+                if (response != null)
                 {
-                    Id = hit._source.Id,
-                    Title = hit._source.Title
-                }).ToList();
+                        data = response.Hits.hits.Select(hit => new Book
+                    {
+                        Id = hit._source.Id,
+                        Title = hit._source.Title
+                    }).ToList();
+                }
 
-                var bookIDs = data.Select(b => b.Id);
-
-                var searchedBooks = _db.Books
-                                    .Include(book => book.Author)
-                                    .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
-                                        .ThenInclude(image => image.BookImageType)
-                                    .Where(b => bookIDs.Contains(b.Id)).Select(b => new WholeBook
-                                    {
-                                        Id = b.Id,
-                                        Title = b.Title,
-                                        Url = b.BookImages.FirstOrDefault().Url,
-                                        Author = b.Author.Name
-                                    });
-
-                return searchedBooks;
+            }
+            catch
+            {
+                data = _db.Books.Where(b => b.Title.Contains(title) && b.IsDeleted == false).Select(b => new Book
+                {
+                    Id = b.Id,
+                    Title = b.Title
+                });
             }
 
-            return null;
+            var bookIDs = data.Select(b => b.Id);
+            var searchedBooks = _db.Books
+                                .Include(book => book.Author)
+                                .Include(book => book.BookImages.Where(image => image.BookImageTypeId == (int)BookImageTypeTDs.Main))
+                                    .ThenInclude(image => image.BookImageType)
+                                .Where(b => bookIDs.Contains(b.Id)).Select(b => new WholeBook
+                                {
+                                    Id = b.Id,
+                                    Title = b.Title,
+                                    Url = b.BookImages.FirstOrDefault().Url,
+                                    Author = b.Author.Name
+                                });
+
+            return searchedBooks;
+
         }
     }
 }

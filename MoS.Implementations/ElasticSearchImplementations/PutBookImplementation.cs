@@ -23,8 +23,9 @@ namespace MoS.Implementations.ElasticSearchImplementations
                 Password = _configuration.GetValue<string>("ElasticSearchService:Password")
             };
 
-            await DeleteAsync<ElasticSearchResponseBody>(
+            await PutAsync<ElasticSearchRequestBody, ElasticSearchResponseBody>(
                     GetUrl(elasticBookId),
+                    body,
                     account,
                     (responseBody) =>
                     {

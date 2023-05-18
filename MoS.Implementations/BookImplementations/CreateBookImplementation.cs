@@ -67,7 +67,7 @@ namespace MoS.Implementations.BookImplementations
             var bookId = Guid.NewGuid();
 
             bool syncToElastic = false;
-            string elasticId;
+            string elasticId = null;
             try
             {
                 await _elasticSetBookService.Set(new ElasticSearchRequestBody
@@ -98,7 +98,8 @@ namespace MoS.Implementations.BookImplementations
                 Edition = book.Edition,
                 BookDetails = book.BookDetails,
                 Description = book.Description,
-                SyncToElastic = syncToElastic
+                SyncToElastic = syncToElastic,
+                ElasticId = elasticId
             });
 
             var images = from image in book.Images

@@ -59,9 +59,9 @@ namespace MoS.Implementations.CommonImplementations
             return credential;
         }
 
-        public double SellOfPrice(double originalPrice, double sellOffRate)
+        public decimal SellOfPrice(double originalPrice, double sellOffRate)
         {
-            return originalPrice * (100 - sellOffRate) / 100;
+            return Convert.ToDecimal(originalPrice * (100 - sellOffRate) / 100);
         }
 
         public void DeleteItem(dynamic item, Guid deletedBy)

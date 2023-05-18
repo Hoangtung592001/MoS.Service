@@ -68,7 +68,7 @@ namespace MoS.Services.BasketServices
         public class Basket
         {
             public IEnumerable<BasketItem> BasketItems { get; set; }
-            public double OrderTotal { get; set; }
+            public decimal OrderTotal { get; set; }
         }
 
         public interface IBasket
